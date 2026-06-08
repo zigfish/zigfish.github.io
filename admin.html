@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin - Garment Factory</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="admin-body">
+
+  <!-- ============ Login Screen ============ -->
+  <div class="login-wrapper" id="login-screen">
+    <div class="login-box">
+      <h1>Admin</h1>
+      <p class="subtitle">后台管理</p>
+      <div class="login-error" id="login-error">Incorrect password</div>
+      <div class="form-group">
+        <label for="login-password">Password / 密码</label>
+        <input type="password" id="login-password" placeholder="Enter password" autocomplete="current-password">
+      </div>
+      <button class="btn btn-primary" id="login-btn">LOGIN</button>
+    </div>
+  </div>
+
+  <!-- ============ Admin Dashboard ============ -->
+  <div class="admin-layout" id="admin-dashboard" style="display:none;">
+    <!-- Sidebar -->
+    <aside class="admin-sidebar">
+      <div class="sidebar-brand">Admin Panel</div>
+      <nav class="sidebar-nav">
+        <a href="#" data-panel="company" class="active">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+          Company / 企业
+        </a>
+        <a href="#" data-panel="categories">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="8" rx="2" ry="2"/><rect x="2" y="14" width="20" height="8" rx="2" ry="2"/></svg>
+          Categories / 品类
+        </a>
+        <a href="#" data-panel="social">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
+          Social / 社媒
+        </a>
+        <a href="#" data-panel="password">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+          Password / 密码
+        </a>
+      </nav>
+      <div class="sidebar-footer">
+        <div class="storage-info">
+          Storage / 存储
+          <div class="storage-bar"><div class="fill" id="storage-fill" style="width:0%"></div></div>
+          <span id="storage-text">0 / 5 MB</span>
+        </div>
+        <button class="btn btn-outline btn-sm" id="logout-btn" style="width:100%;color:#fff;border-color:rgba(255,255,255,0.2);">LOGOUT</button>
+      </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="admin-main">
+
+      <!-- Company Info Panel -->
+      <div class="admin-panel active" id="panel-company">
+        <div class="page-header">
+          <h2>Company Info / 企业信息</h2>
+          <p>Edit company details — English displays on frontend, Chinese as secondary</p>
+        </div>
+
+        <div class="card">
+          <div class="card-header"><h3>Logo</h3></div>
+          <div class="card-body">
+            <div class="logo-upload-area">
+              <div class="logo-preview" id="logo-preview">
+                <span class="no-logo">No Logo</span>
+              </div>
+              <div>
+                <button class="btn btn-outline btn-sm" id="logo-upload-btn">Upload Logo</button>
+                <input type="file" id="logo-file-input" accept="image/*" style="display:none;">
+                <button class="btn btn-outline btn-sm" id="logo-remove-btn" style="margin-left:8px;color:#c0392b;">Remove</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header"><h3>Basic Info / 基本信息</h3></div>
+          <div class="card-body">
+            <div class="field-pair">
+              <div class="form-group">
+                <label for="co-name">Company Name <span class="label-hint">/ 公司名称（中文）</span></label>
+                <input type="text" id="co-name" placeholder="输入中文公司名称">
+              </div>
+              <div class="form-group">
+                <label for="co-name-en">Company Name <span class="label-hint">/ 公司名称（英文）</span></label>
+                <input type="text" id="co-name-en" placeholder="English company name">
+              </div>
+            </div>
+            <div class="field-pair">
+              <div class="form-group">
+                <label for="co-address">Address <span class="label-hint">/ 地址（中文）</span></label>
+                <input type="text" id="co-address" placeholder="输入中文地址">
+              </div>
+              <div class="form-group">
+                <label for="co-address-en">Address <span class="label-hint">/ 地址（英文）</span></label>
+                <input type="text" id="co-address-en" placeholder="English address">
+              </div>
+            </div>
+            <div class="field-pair">
+              <div class="form-group">
+                <label for="co-phone">Phone / 电话</label>
+                <input type="text" id="co-phone" placeholder="+86 020-8888-6666">
+              </div>
+              <div class="form-group">
+                <label for="co-email">Email / 邮箱</label>
+                <input type="text" id="co-email" placeholder="info@example.com">
+              </div>
+            </div>
+            <div class="field-pair">
+              <div class="form-group">
+                <label for="co-intro">Introduction <span class="label-hint">/ 企业简介（中文）</span></label>
+                <textarea id="co-intro" rows="5" placeholder="输入中文企业简介"></textarea>
+              </div>
+              <div class="form-group">
+                <label for="co-intro-en">Introduction <span class="label-hint">/ 企业简介（英文）</span></label>
+                <textarea id="co-intro-en" rows="5" placeholder="English company introduction"></textarea>
+              </div>
+            </div>
+            <button class="btn btn-primary" id="save-company-btn" style="width:auto;">SAVE / 保存</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Categories Panel -->
+      <div class="admin-panel" id="panel-categories">
+        <div class="page-header">
+          <h2>Categories / 品类管理</h2>
+          <p>Manage product categories and images — fill both Chinese and English fields</p>
+        </div>
+
+        <div class="card">
+          <div class="card-header">
+            <h3>Category List / 品类列表</h3>
+            <button class="btn btn-outline btn-sm" id="add-category-btn">+ Add / 新增</button>
+          </div>
+          <div class="card-body" id="category-admin-list">
+            <!-- Rendered by JS -->
+          </div>
+        </div>
+      </div>
+
+      <!-- Social Links Panel -->
+      <div class="admin-panel" id="panel-social">
+        <div class="page-header">
+          <h2>Social Media / 社交媒体</h2>
+          <p>Add your social media platform links — leave blank to hide</p>
+        </div>
+
+        <div class="card">
+          <div class="card-body">
+            <div class="form-group">
+              <label for="soc-tiktok">TikTok</label>
+              <input type="text" id="soc-tiktok" placeholder="https://www.tiktok.com/@your-account">
+            </div>
+            <div class="form-group">
+              <label for="soc-facebook">Facebook</label>
+              <input type="text" id="soc-facebook" placeholder="https://www.facebook.com/your-page">
+            </div>
+            <div class="form-group">
+              <label for="soc-linkedin">LinkedIn</label>
+              <input type="text" id="soc-linkedin" placeholder="https://www.linkedin.com/company/your-company">
+            </div>
+            <button class="btn btn-primary" id="save-social-btn" style="width:auto;">SAVE / 保存</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Password Panel -->
+      <div class="admin-panel" id="panel-password">
+        <div class="page-header">
+          <h2>Change Password / 修改密码</h2>
+          <p>Update admin login password</p>
+        </div>
+
+        <div class="card">
+          <div class="card-body" style="max-width:420px;">
+            <div class="form-group">
+              <label for="old-pwd">Current Password / 当前密码</label>
+              <input type="password" id="old-pwd" autocomplete="current-password">
+            </div>
+            <div class="form-group">
+              <label for="new-pwd">New Password / 新密码</label>
+              <input type="password" id="new-pwd" autocomplete="new-password">
+            </div>
+            <div class="form-group">
+              <label for="confirm-pwd">Confirm Password / 确认密码</label>
+              <input type="password" id="confirm-pwd" autocomplete="new-password">
+            </div>
+            <div class="login-error" id="pwd-error"></div>
+            <button class="btn btn-primary" id="save-pwd-btn" style="width:auto;">UPDATE / 更新</button>
+          </div>
+        </div>
+      </div>
+
+    </main>
+  </div>
+
+  <!-- Toast -->
+  <div class="toast" id="toast"></div>
+
+  <!-- Hidden file input for category image upload -->
+  <input type="file" id="hidden-image-input" accept="image/*" multiple style="display:none;">
+
+  <!-- Add/Edit Category Modal -->
+  <div class="modal-overlay" id="add-cat-modal">
+    <div class="modal-content" style="max-width:520px;">
+      <div class="modal-header">
+        <h3 id="add-cat-modal-title">Add Category</h3>
+        <button class="modal-close" id="add-cat-modal-close">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="field-pair">
+          <div class="form-group">
+            <label for="add-cat-name">Name <span class="label-hint">/ 中文名称</span></label>
+            <input type="text" id="add-cat-name" placeholder="品类中文名称">
+          </div>
+          <div class="form-group">
+            <label for="add-cat-name-en">Name <span class="label-hint">/ 英文名称</span></label>
+            <input type="text" id="add-cat-name-en" placeholder="English category name">
+          </div>
+        </div>
+        <div class="field-pair">
+          <div class="form-group">
+            <label for="add-cat-desc">Description <span class="label-hint">/ 中文描述</span></label>
+            <textarea id="add-cat-desc" rows="2" placeholder="品类中文描述"></textarea>
+          </div>
+          <div class="form-group">
+            <label for="add-cat-desc-en">Description <span class="label-hint">/ 英文描述</span></label>
+            <textarea id="add-cat-desc-en" rows="2" placeholder="English category description"></textarea>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>
+            <input type="checkbox" id="add-cat-placeholder"> Mark as placeholder / 标记为留空品类
+          </label>
+        </div>
+        <button class="btn btn-primary" id="add-cat-save-btn">SAVE / 保存</button>
+        <input type="hidden" id="add-cat-edit-id" value="">
+      </div>
+    </div>
+  </div>
+
+  <script src="js/data.js"></script>
+  <script src="js/admin.js"></script>
+</body>
+</html>
