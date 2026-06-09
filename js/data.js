@@ -165,7 +165,6 @@ var DataManager = (function () {
     if (window.location.protocol === "https:" || window.location.protocol === "http:") {
       var xhr = new XMLHttpRequest();
       xhr.open("GET", "fashion-data.json", false);
-      xhr.timeout = 3000;
       xhr.send();
       if (xhr.status === 200) {
         _externalData = JSON.parse(xhr.responseText);
