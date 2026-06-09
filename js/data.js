@@ -8,7 +8,7 @@ var DataManager = (function () {
   var MAX_STORAGE = 5 * 1024 * 1024;
   var DEFAULT_PASSWORD = "admin123";
 
-  var DATA_VERSION = 1;
+  var DATA_VERSION = 2;
 
   var DEFAULT_DATA = {
     dataVersion: 0,
@@ -155,7 +155,11 @@ var DataManager = (function () {
         images: [],
         placeholder: true
       }
-    ]
+    ],
+    coverImage: "",
+    certificates: [],
+    wechatQR: "",
+    whatsapp: ""
   };
 
   var _externalData = null;
@@ -226,8 +230,34 @@ var DataManager = (function () {
     var out = JSON.parse(JSON.stringify(target));
     for (var key in source) {
       if (!source.hasOwnProperty(key)) continue;
+      // Special handling: merge certificate arrays by id
+      if (key === "certificates" && Array.isArray(source[key])) {
+        if (!Array.isArray(out[key]) || out[key].length === 0) {
+          out[key] = source[key];
+        } else {
+          var mergedCerts = [];
+          var certSourceMap = {};
+          for (var ci = 0; ci < source[key].length; ci++) {
+            certSourceMap[source[key][ci].id] = source[key][ci];
+          }
+          for (var cj = 0; cj < out[key].length; cj++) {
+            var tCert = out[key][cj];
+            if (certSourceMap[tCert.id]) {
+              mergedCerts.push(certSourceMap[tCert.id]);
+              delete certSourceMap[tCert.id];
+            } else {
+              mergedCerts.push(tCert);
+            }
+          }
+          for (var cid in certSourceMap) {
+            if (certSourceMap.hasOwnProperty(cid)) {
+              mergedCerts.push(certSourceMap[cid]);
+            }
+          }
+          out[key] = mergedCerts;
+        }
       // Special handling: merge categories array by id
-      if (key === "categories" && Array.isArray(source[key]) && Array.isArray(out[key])) {
+      } else if (key === "categories" && Array.isArray(source[key]) && Array.isArray(out[key])) {
         var mergedCats = [];
         var sourceMap = {};
         for (var si = 0; si < source[key].length; si++) {
@@ -357,6 +387,66 @@ var DataManager = (function () {
     saveAllData(data);
   }
 
+  // ---- Cover Image ----
+  function getCoverImage() {
+    return getAllData().coverImage || "";
+  }
+
+  function updateCoverImage(dataUrl) {
+    var data = getAllData();
+    data.coverImage = dataUrl;
+    saveAllData(data);
+  }
+
+  // ---- Certificates ----
+  function getCertificates() {
+    return getAllData().certificates;
+  }
+
+  function getCertificate(id) {
+    return getAllData().certificates.find(function (c) { return c.id === id; });
+  }
+
+  function addCertificate(cert) {
+    var data = getAllData();
+    var maxId = data.certificates.reduce(function (max, c) { return Math.max(max, c.id); }, 0);
+    data.certificates.push({
+      id: maxId + 1,
+      name: cert.name,
+      nameEn: cert.nameEn || "",
+      image: cert.image || "",
+      file: cert.file || ""
+    });
+    saveAllData(data);
+  }
+
+  function updateCertificate(id, updates) {
+    var data = getAllData();
+    var idx = data.certificates.findIndex(function (c) { return c.id === id; });
+    if (idx === -1) return;
+    data.certificates[idx] = Object.assign({}, data.certificates[idx], updates);
+    saveAllData(data);
+  }
+
+  function deleteCertificate(id) {
+    var data = getAllData();
+    data.certificates = data.certificates.filter(function (c) { return c.id !== id; });
+    saveAllData(data);
+  }
+
+  // ---- Contact Settings ----
+  function getContactSettings() {
+    var d = getAllData();
+    return { wechatQR: d.wechatQR || "", whatsapp: d.whatsapp || "" };
+  }
+
+  function updateContactSettings(settings) {
+    var data = getAllData();
+    if (settings.wechatQR !== undefined) data.wechatQR = settings.wechatQR;
+    if (settings.whatsapp !== undefined) data.whatsapp = settings.whatsapp;
+    saveAllData(data);
+  }
+
   // ---- Password ----
   function verifyPassword(pwd) {
     return getAllData().password === pwd;
@@ -430,6 +520,15 @@ var DataManager = (function () {
     addImageToCategory: addImageToCategory,
     deleteImageFromCategory: deleteImageFromCategory,
     replaceImageInCategory: replaceImageInCategory,
+    updateCoverImage: updateCoverImage,
+    getCoverImage: getCoverImage,
+    getCertificates: getCertificates,
+    getCertificate: getCertificate,
+    addCertificate: addCertificate,
+    updateCertificate: updateCertificate,
+    deleteCertificate: deleteCertificate,
+    getContactSettings: getContactSettings,
+    updateContactSettings: updateContactSettings,
     verifyPassword: verifyPassword,
     updatePassword: updatePassword,
     getStorageUsage: getStorageUsage,

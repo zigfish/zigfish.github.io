@@ -1,5 +1,5 @@
 {
-  "dataVersion": 1,
+  "dataVersion": 2,
   "company": {
     "name": "宿迁腾跃服饰有限公司",
     "nameEn": "SUQIAN TENGYUE GARMENT CO.,LTD",
@@ -142,5 +142,17 @@
       "images": [],
       "placeholder": true
     }
-  ]
+  ],
+  "coverImage": "images/cover.png",
+  "certificates": [
+    {
+      "id": 1,
+      "name": "BSCI 认证",
+      "nameEn": "BSCI Certificate",
+      "image": "",
+      "file": "files/BSCI-Audit-Report.pdf"
+    }
+  ],
+  "wechatQR": "",
+  "whatsapp": ""
 }

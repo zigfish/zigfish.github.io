@@ -70,6 +70,8 @@
     if (currentPanel === "company") loadCompanyForm();
     if (currentPanel === "categories") loadCategoriesList();
     if (currentPanel === "social") loadSocialForm();
+    if (currentPanel === "certificates") loadCertificatesList();
+    if (currentPanel === "contact-settings") loadContactSettingsForm();
     updateStorageInfo();
   }
 
@@ -522,8 +524,10 @@
 
     document.addEventListener("keydown", function (e) {
       if (e.key === "Escape") {
-        var modal = document.getElementById("add-cat-modal");
-        if (modal.classList.contains("active")) closeCategoryModal();
+        var catModal = document.getElementById("add-cat-modal");
+        if (catModal && catModal.classList.contains("active")) closeCategoryModal();
+        var certModal = document.getElementById("add-cert-modal");
+        if (certModal && certModal.classList.contains("active")) closeCertModal();
       }
     });
   }
@@ -595,6 +599,236 @@
     });
   }
 
+  // ==================== CERTIFICATES ====================
+
+  var pendingCertImageData = "";
+
+  function loadCertificatesList() {
+    var certs = DataManager.getCertificates();
+    var container = document.getElementById("cert-admin-list");
+    if (!certs.length) {
+      container.innerHTML = '<div class="empty-state">No certificates / 暂无证书</div>';
+      return;
+    }
+    container.innerHTML = certs.map(function (cert) {
+      var imgTag = cert.image ? ' <span style="font-size:10px;color:#2d8c4a;">[Image]</span>' : '';
+      var fileTag = cert.file ? ' <span style="font-size:10px;color:#2d8c4a;">[File]</span>' : '';
+      return (
+        '<div class="category-list-item">' +
+        '<div class="category-list-header">' +
+        '<div class="info">' +
+        "<h4>" + escapeHtml(cert.name) + imgTag + fileTag + "</h4>" +
+        (cert.nameEn ? '<span class="en-name">' + escapeHtml(cert.nameEn) + '</span>' : "") +
+        "</div>" +
+        '<div class="actions" onclick="event.stopPropagation()">' +
+        '<button class="btn btn-outline btn-xs edit-cert-btn" data-id="' + cert.id + '">Edit</button>' +
+        '<button class="btn btn-outline btn-xs delete-cert-btn" data-id="' + cert.id + '" style="color:#c0392b;">Delete</button>' +
+        "</div>" +
+        "</div>" +
+        "</div>"
+      );
+    }).join("");
+
+    bindCertListEvents(container);
+  }
+
+  function bindCertListEvents(container) {
+    var editBtns = container.querySelectorAll(".edit-cert-btn");
+    for (var i = 0; i < editBtns.length; i++) {
+      editBtns[i].addEventListener("click", function (e) {
+        e.stopPropagation();
+        openEditCertModal(parseInt(this.getAttribute("data-id")));
+      });
+    }
+    var delBtns = container.querySelectorAll(".delete-cert-btn");
+    for (var j = 0; j < delBtns.length; j++) {
+      delBtns[j].addEventListener("click", function (e) {
+        e.stopPropagation();
+        var certId = parseInt(this.getAttribute("data-id"));
+        var cert = DataManager.getCertificate(certId);
+        if (cert && confirm('Delete certificate "' + cert.name + '"?')) {
+          DataManager.deleteCertificate(certId);
+          loadCertificatesList();
+          updateStorageInfo();
+          showToast("Certificate deleted / 证书已删除");
+        }
+      });
+    }
+  }
+
+  // ---- Certificate Modal ----
+  function openEditCertModal(certId) {
+    var cert = DataManager.getCertificate(certId);
+    if (!cert) return;
+    document.getElementById("add-cert-modal-title").textContent = "Edit Certificate / 编辑证书";
+    document.getElementById("add-cert-name").value = cert.name || "";
+    document.getElementById("add-cert-name-en").value = cert.nameEn || "";
+    document.getElementById("add-cert-file").value = cert.file || "";
+    document.getElementById("add-cert-img-data").value = cert.image || "";
+    document.getElementById("add-cert-img-name").textContent = cert.image ? "Image selected" : "";
+    document.getElementById("add-cert-edit-id").value = certId;
+    document.getElementById("add-cert-modal").classList.add("active");
+    document.body.style.overflow = "hidden";
+  }
+
+  function openAddCertModal() {
+    document.getElementById("add-cert-modal-title").textContent = "Add Certificate / 新增证书";
+    document.getElementById("add-cert-name").value = "";
+    document.getElementById("add-cert-name-en").value = "";
+    document.getElementById("add-cert-file").value = "";
+    document.getElementById("add-cert-img-data").value = "";
+    document.getElementById("add-cert-img-name").textContent = "";
+    document.getElementById("add-cert-edit-id").value = "";
+    document.getElementById("add-cert-modal").classList.add("active");
+    document.body.style.overflow = "hidden";
+  }
+
+  function closeCertModal() {
+    document.getElementById("add-cert-modal").classList.remove("active");
+    document.body.style.overflow = "";
+  }
+
+  function initCertificateModal() {
+    document.getElementById("add-cert-btn").addEventListener("click", openAddCertModal);
+    document.getElementById("add-cert-modal-close").addEventListener("click", closeCertModal);
+    document.getElementById("add-cert-modal").addEventListener("click", function (e) {
+      if (e.target === this) closeCertModal();
+    });
+
+    // Cert image upload
+    var certImgInput = document.getElementById("add-cert-img-file");
+    document.getElementById("add-cert-img-btn").addEventListener("click", function () {
+      certImgInput.click();
+    });
+    certImgInput.addEventListener("change", function () {
+      if (!this.files || !this.files[0]) return;
+      var file = this.files[0];
+      if (file.size > 3 * 1024 * 1024) {
+        showToast("Image must be under 3MB", "error");
+        return;
+      }
+      DataManager.compressImage(file, 1400, 0.7).then(function (dataUrl) {
+        document.getElementById("add-cert-img-data").value = dataUrl;
+        document.getElementById("add-cert-img-name").textContent = file.name;
+      });
+      this.value = "";
+    });
+
+    // Save certificate
+    document.getElementById("add-cert-save-btn").addEventListener("click", function () {
+      var name = document.getElementById("add-cert-name").value.trim();
+      var nameEn = document.getElementById("add-cert-name-en").value.trim();
+      var file = document.getElementById("add-cert-file").value.trim();
+      var image = document.getElementById("add-cert-img-data").value;
+      var editId = document.getElementById("add-cert-edit-id").value;
+
+      if (!name) {
+        showToast("Please enter certificate name (CN)", "error");
+        return;
+      }
+
+      var certData = { name: name, nameEn: nameEn, image: image, file: file };
+      if (editId) {
+        DataManager.updateCertificate(parseInt(editId), certData);
+        showToast("Certificate updated / 证书已更新");
+      } else {
+        DataManager.addCertificate(certData);
+        showToast("Certificate added / 证书已添加");
+      }
+      closeCertModal();
+      loadCertificatesList();
+      updateStorageInfo();
+    });
+  }
+
+  // ==================== CONTACT SETTINGS ====================
+
+  function loadContactSettingsForm() {
+    var settings = DataManager.getContactSettings();
+    // Cover image
+    var cover = DataManager.getCoverImage();
+    renderSettingPreview("cover-preview", cover, "No Cover");
+    // WeChat QR
+    renderSettingPreview("wechatqr-preview", settings.wechatQR, "No QR");
+    // WhatsApp
+    document.getElementById("whatsapp-input").value = settings.whatsapp || "";
+  }
+
+  function renderSettingPreview(previewId, dataUrl, emptyText) {
+    var preview = document.getElementById(previewId);
+    if (dataUrl) {
+      preview.innerHTML = '<img src="' + dataUrl + '" alt="Preview">';
+    } else {
+      preview.innerHTML = '<span class="no-logo">' + emptyText + '</span>';
+    }
+  }
+
+  function initContactSettingsForm() {
+    // Cover image upload
+    var coverInput = document.getElementById("cover-file-input");
+    document.getElementById("cover-upload-btn").addEventListener("click", function () {
+      coverInput.click();
+    });
+    coverInput.addEventListener("change", function () {
+      if (!this.files || !this.files[0]) return;
+      var file = this.files[0];
+      if (file.size > 3 * 1024 * 1024) {
+        showToast("Image must be under 3MB", "error");
+        return;
+      }
+      DataManager.compressImage(file, 1920, 0.75).then(function (dataUrl) {
+        DataManager.updateCoverImage(dataUrl);
+        renderSettingPreview("cover-preview", dataUrl, "No Cover");
+        showToast("Cover image updated / 封面已更新");
+        updateStorageInfo();
+      });
+      this.value = "";
+    });
+    document.getElementById("cover-remove-btn").addEventListener("click", function () {
+      DataManager.updateCoverImage("");
+      renderSettingPreview("cover-preview", "", "No Cover");
+      showToast("Cover removed / 封面已移除");
+      updateStorageInfo();
+    });
+
+    // WeChat QR upload
+    var qrInput = document.getElementById("wechatqr-file-input");
+    document.getElementById("wechatqr-upload-btn").addEventListener("click", function () {
+      qrInput.click();
+    });
+    qrInput.addEventListener("change", function () {
+      if (!this.files || !this.files[0]) return;
+      var file = this.files[0];
+      if (file.size > 1 * 1024 * 1024) {
+        showToast("QR image must be under 1MB", "error");
+        return;
+      }
+      var reader = new FileReader();
+      reader.onload = function (e) {
+        var dataUrl = e.target.result;
+        DataManager.updateContactSettings({ wechatQR: dataUrl });
+        renderSettingPreview("wechatqr-preview", dataUrl, "No QR");
+        showToast("WeChat QR updated / 微信二维码已更新");
+        updateStorageInfo();
+      };
+      reader.readAsDataURL(file);
+      this.value = "";
+    });
+    document.getElementById("wechatqr-remove-btn").addEventListener("click", function () {
+      DataManager.updateContactSettings({ wechatQR: "" });
+      renderSettingPreview("wechatqr-preview", "", "No QR");
+      showToast("WeChat QR removed / 微信二维码已移除");
+      updateStorageInfo();
+    });
+
+    // Save WhatsApp
+    document.getElementById("save-contact-settings-btn").addEventListener("click", function () {
+      var whatsapp = document.getElementById("whatsapp-input").value.trim();
+      DataManager.updateContactSettings({ whatsapp: whatsapp });
+      showToast("Contact settings saved / 联系方式已保存");
+    });
+  }
+
   // ---- Init ----
   function init() {
     initLogin();
@@ -606,6 +840,8 @@
     initImageUpload();
     initDelegatedUpload();
     initCategoryModal();
+    initCertificateModal();
+    initContactSettingsForm();
     initPasswordForm();
   }
 

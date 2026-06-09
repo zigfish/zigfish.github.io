@@ -308,6 +308,136 @@
     }
   }
 
+  // ---- Cover Image ----
+  function renderCoverImage() {
+    var cover = DataManager.getCoverImage();
+    var bg = document.getElementById("hero-bg");
+    if (cover) {
+      bg.style.backgroundImage = "url(" + cover + ")";
+      bg.classList.add("show");
+    }
+  }
+
+  // ---- Certificates ----
+  function renderCertificates() {
+    var certs = DataManager.getCertificates();
+    var grid = document.getElementById("certificates-grid");
+    if (!certs.length) {
+      document.getElementById("certificates").style.display = "none";
+      return;
+    }
+    document.getElementById("certificates").style.display = "";
+    grid.innerHTML = certs.map(function (cert) {
+      var imgHtml = cert.image
+        ? '<img src="' + escapeAttr(cert.image) + '" alt="' + escapeAttr(cert.nameEn || cert.name) + '">'
+        : '<div class="cert-placeholder"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><polyline points="9 11 12 14 22 4"/></svg></div>';
+      var downloadHtml = cert.file
+        ? '<a class="cert-download btn btn-outline btn-sm" href="' + escapeAttr(cert.file) + '" target="_blank" rel="noopener">Download / 下载</a>'
+        : "";
+      return (
+        '<div class="cert-card">' +
+        '<div class="cert-img">' + imgHtml + "</div>" +
+        '<div class="cert-info">' +
+        '<span class="en">' + escapeHtml(cert.nameEn || cert.name) + "</span>" +
+        '<span class="cn">' + escapeHtml(cert.name) + "</span>" +
+        downloadHtml +
+        "</div>" +
+        "</div>"
+      );
+    }).join("");
+  }
+
+  // ---- Contact Chat Row (WeChat + WhatsApp) ----
+  function renderContactChat() {
+    var settings = DataManager.getContactSettings();
+    var row = document.getElementById("contact-chat-row");
+    if (!settings.wechatQR && !settings.whatsapp) {
+      row.style.display = "none";
+      return;
+    }
+    row.style.display = "";
+    var html = "";
+    if (settings.wechatQR) {
+      html +=
+        '<div class="contact-chat-item wechat-item" id="wechat-trigger">' +
+        '<div class="chat-icon wechat-icon">' +
+        '<svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M8.691 2.188C3.891 2.188 0 5.476 0 9.53c0 2.212 1.17 4.203 3.002 5.55a.59.59 0 0 1 .213.665l-.39 1.48c-.019.07-.048.141-.048.213 0 .163.13.295.29.295a.326.326 0 0 0 .167-.054l1.903-1.114a.864.864 0 0 1 .717-.098 10.16 10.16 0 0 0 2.837.403c.276 0 .543-.027.811-.05-.857-2.578.157-4.972 1.932-6.446 1.703-1.415 3.882-1.98 5.853-1.838-.576-3.583-4.196-6.348-8.596-6.348zM5.785 5.991c.642 0 1.162.529 1.162 1.18a1.17 1.17 0 0 1-1.162 1.178A1.17 1.17 0 0 1 4.623 7.17c0-.651.52-1.18 1.162-1.18zm5.813 0c.642 0 1.162.529 1.162 1.18a1.17 1.17 0 0 1-1.162 1.178 1.17 1.17 0 0 1-1.162-1.178c0-.651.52-1.18 1.162-1.18z"/><path d="M22.406 15.477c0-3.342-3.044-6.058-6.788-6.058-3.75 0-6.793 2.716-6.793 6.058 0 3.342 3.043 6.058 6.793 6.058a7.6 7.6 0 0 0 2.135-.307.66.66 0 0 1 .55.075l1.432.84a.25.25 0 0 0 .127.04.222.222 0 0 0 .22-.224c0-.053-.023-.107-.035-.158l-.299-1.13a.45.45 0 0 1 .162-.502c1.354-1.003 2.496-2.724 2.496-4.692zm-9.111-1.854c.488 0 .884.402.884.897a.89.89 0 0 1-.884.896.89.89 0 0 1-.884-.896c0-.495.396-.897.884-.897zm4.527 0c.488 0 .885.402.885.897a.89.89 0 0 1-.885.896.89.89 0 0 1-.884-.896c0-.495.396-.897.884-.897z"/></svg>' +
+        "</div>" +
+        '<span class="chat-label">WeChat / 微信</span>' +
+        "</div>";
+    }
+    if (settings.whatsapp) {
+      html +=
+        '<a class="contact-chat-item whatsapp-item" href="https://wa.me/' + escapeAttr(settings.whatsapp.replace(/[^0-9]/g, "")) + '" target="_blank" rel="noopener">' +
+        '<div class="chat-icon whatsapp-icon">' +
+        '<svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347"/></svg>' +
+        "</div>" +
+        '<span class="chat-label">WhatsApp</span>' +
+        "</a>";
+    }
+    row.innerHTML = html;
+
+    // WeChat click → open QR modal
+    if (settings.wechatQR) {
+      var trigger = document.getElementById("wechat-trigger");
+      if (trigger) {
+        trigger.addEventListener("click", function () {
+          document.getElementById("wechat-qr-img").src = settings.wechatQR;
+          document.getElementById("wechat-modal").classList.add("active");
+          document.body.style.overflow = "hidden";
+        });
+      }
+    }
+  }
+
+  // ---- Inquiry Form ----
+  function renderInquiryForm() {
+    var categories = DataManager.getCategories();
+    var select = document.querySelector('#inquiry-form select[name="product"]');
+    if (!select) return;
+    for (var i = 0; i < categories.length; i++) {
+      var opt = document.createElement("option");
+      opt.value = categories[i].nameEn || categories[i].name;
+      opt.textContent = (categories[i].nameEn || categories[i].name) + " / " + categories[i].name;
+      select.appendChild(opt);
+    }
+  }
+
+  // ---- WeChat Modal ----
+  function initWechatModal() {
+    document.getElementById("wechat-modal-close").addEventListener("click", function () {
+      document.getElementById("wechat-modal").classList.remove("active");
+      document.body.style.overflow = "";
+    });
+    document.getElementById("wechat-modal").addEventListener("click", function (e) {
+      if (e.target === this) {
+        document.getElementById("wechat-modal").classList.remove("active");
+        document.body.style.overflow = "";
+      }
+    });
+    document.addEventListener("keydown", function (e) {
+      if (e.key === "Escape") {
+        var wm = document.getElementById("wechat-modal");
+        if (wm && wm.classList.contains("active")) {
+          wm.classList.remove("active");
+          document.body.style.overflow = "";
+        }
+      }
+    });
+  }
+
+  // ---- WhatsApp Float ----
+  function initWhatsAppFloat() {
+    var settings = DataManager.getContactSettings();
+    var wa = document.getElementById("whatsapp-float");
+    if (!settings.whatsapp) {
+      wa.style.display = "none";
+      return;
+    }
+    wa.href = "https://wa.me/" + settings.whatsapp.replace(/[^0-9]/g, "");
+    wa.style.display = "";
+  }
+
   // ---- Active Nav Highlight ----
   function initNavHighlight() {
     var sections = document.querySelectorAll("section[id]");
@@ -332,8 +462,14 @@
   // ---- Init ----
   function init() {
     renderCompanyInfo();
+    renderCoverImage();
     renderSocialLinks();
     renderCategories();
+    renderCertificates();
+    renderContactChat();
+    renderInquiryForm();
+    initWechatModal();
+    initWhatsAppFloat();
     initMobileMenu();
     initBackToTop();
     initModal();

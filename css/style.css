@@ -1178,6 +1178,240 @@ ul {
   font-size: 12px;
 }
 
+/* ---------- Hero Cover + CTA ---------- */
+.hero {
+  position: relative;
+  overflow: hidden;
+}
+
+.hero-bg {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center;
+  opacity: 0;
+  transition: opacity 0.8s ease;
+  z-index: 0;
+}
+
+.hero-bg::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.55);
+}
+
+.hero-bg.show {
+  opacity: 1;
+}
+
+.hero-content {
+  position: relative;
+  z-index: 1;
+}
+
+.hero-cta {
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+  margin-top: 32px;
+  flex-wrap: wrap;
+}
+
+.hero-cta .btn {
+  padding: 12px 28px;
+  font-size: 13px;
+  letter-spacing: 2px;
+}
+
+/* ---------- Nav Inquiry Highlight ---------- */
+.nav-inquiry {
+  color: var(--color-accent) !important;
+  font-weight: 700 !important;
+}
+
+/* ---------- Certificates ---------- */
+.certificates-section {
+  padding: 0 0 80px;
+}
+
+.certificates-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 24px;
+}
+
+.cert-card {
+  background: #fff;
+  border: 1px solid var(--color-border);
+  overflow: hidden;
+  transition: var(--transition);
+}
+
+.cert-card:hover {
+  box-shadow: var(--shadow-lg);
+  transform: translateY(-2px);
+}
+
+.cert-img {
+  width: 100%;
+  height: 360px;
+  background: #f5f5f5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.cert-img img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  padding: 20px;
+}
+
+.cert-placeholder {
+  color: #ccc;
+}
+
+.cert-info {
+  padding: 18px 20px;
+  border-top: 1px solid var(--color-border);
+}
+
+.cert-info .en {
+  display: block;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  margin-bottom: 4px;
+}
+
+.cert-info .cn {
+  display: block;
+  font-size: 12px;
+  color: var(--color-text-light);
+  margin-bottom: 10px;
+}
+
+.cert-download {
+  display: inline-block;
+  margin-top: 6px;
+}
+
+/* ---------- Contact Chat Row ---------- */
+.contact-chat-row {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  margin-top: 32px;
+  flex-wrap: wrap;
+}
+
+.contact-chat-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 28px;
+  border: 1px solid var(--color-border);
+  cursor: pointer;
+  transition: var(--transition);
+  text-decoration: none;
+  color: inherit;
+}
+
+.contact-chat-item:hover {
+  border-color: var(--color-bg-dark);
+}
+
+.wechat-item:hover {
+  background: #07c16010;
+  border-color: #07c160;
+}
+
+.whatsapp-item:hover {
+  background: #25d36610;
+  border-color: #25d366;
+}
+
+.chat-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.wechat-icon {
+  background: #07c160;
+  color: #fff;
+}
+
+.whatsapp-icon {
+  background: #25d366;
+  color: #fff;
+}
+
+.chat-label {
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+/* ---------- Inquiry ---------- */
+.inquiry-section {
+  padding: 0 0 80px;
+}
+
+.inquiry-intro {
+  text-align: center;
+  font-size: 13px;
+  color: var(--color-text-light);
+  line-height: 1.8;
+  margin-bottom: 32px;
+}
+
+.inquiry-form {
+  background: #fff;
+  padding: 32px;
+  border: 1px solid var(--color-border);
+}
+
+.inquiry-form .field-pair {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.inquiry-form .form-group textarea {
+  min-height: 120px;
+}
+
+/* ---------- WhatsApp Float ---------- */
+.whatsapp-float {
+  position: fixed;
+  bottom: 90px;
+  right: 32px;
+  width: 52px;
+  height: 52px;
+  background: #25d366;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 16px rgba(37, 211, 102, 0.35);
+  z-index: 49;
+  transition: transform 0.3s ease;
+}
+
+.whatsapp-float:hover {
+  transform: scale(1.1);
+}
+
 /* ---------- Responsive ---------- */
 @media (max-width: 1024px) {
   .category-grid {
