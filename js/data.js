@@ -155,15 +155,41 @@ var DataManager = (function () {
     ]
   };
 
+  var _externalData = null;
+
+  // Try to load external data file (for deployed version)
+  try {
+    if (window.location.protocol === "https:" || window.location.protocol === "http:") {
+      var xhr = new XMLHttpRequest();
+      xhr.open("GET", "fashion-data.json", false);
+      xhr.timeout = 3000;
+      xhr.send();
+      if (xhr.status === 200) {
+        _externalData = JSON.parse(xhr.responseText);
+      }
+    }
+  } catch (e) {
+    // Ignore — use defaults
+  }
+
   function getAllData() {
     try {
       var raw = localStorage.getItem(STORAGE_KEY);
       if (!raw) {
-        saveAllData(JSON.parse(JSON.stringify(DEFAULT_DATA)));
-        return JSON.parse(JSON.stringify(DEFAULT_DATA));
+        var seed;
+        if (_externalData) {
+          seed = deepMerge(JSON.parse(JSON.stringify(DEFAULT_DATA)), _externalData);
+        } else {
+          seed = JSON.parse(JSON.stringify(DEFAULT_DATA));
+        }
+        saveAllData(seed);
+        return JSON.parse(JSON.stringify(seed));
       }
       var data = JSON.parse(raw);
-      return deepMerge(JSON.parse(JSON.stringify(DEFAULT_DATA)), data);
+      var base = _externalData
+        ? deepMerge(JSON.parse(JSON.stringify(DEFAULT_DATA)), _externalData)
+        : JSON.parse(JSON.stringify(DEFAULT_DATA));
+      return deepMerge(base, data);
     } catch (e) {
       console.error("Failed to read data:", e);
       return JSON.parse(JSON.stringify(DEFAULT_DATA));

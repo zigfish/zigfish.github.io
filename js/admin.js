@@ -573,10 +573,33 @@
     return str.replace(/&/g, "&amp;").replace(/"/g, "&quot;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/'/g, "&#39;");
   }
 
+  // ---- Export Data ----
+  function initExport() {
+    document.getElementById("export-nav-btn").addEventListener("click", function (e) {
+      e.preventDefault();
+      var allData = DataManager.getAllData();
+      // Remove password from export for security
+      var exportData = JSON.parse(JSON.stringify(allData));
+      delete exportData.password;
+      var json = JSON.stringify(exportData, null, 2);
+      var blob = new Blob([json], { type: "application/json" });
+      var url = URL.createObjectURL(blob);
+      var a = document.createElement("a");
+      a.href = url;
+      a.download = "fashion-data.json";
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+      showToast("Data exported / 数据已导出");
+    });
+  }
+
   // ---- Init ----
   function init() {
     initLogin();
     initLogout();
+    initExport();
     initSidebar();
     initCompanyForm();
     initSocialForm();
