@@ -8,7 +8,10 @@ var DataManager = (function () {
   var MAX_STORAGE = 5 * 1024 * 1024;
   var DEFAULT_PASSWORD = "admin123";
 
+  var DATA_VERSION = 1;
+
   var DEFAULT_DATA = {
+    dataVersion: 0,
     password: DEFAULT_PASSWORD,
     company: {
       name: "示范服装工厂",
@@ -186,6 +189,12 @@ var DataManager = (function () {
         return JSON.parse(JSON.stringify(seed));
       }
       var data = JSON.parse(raw);
+      // If deployed data version is newer, re-seed from external file
+      if (_externalData && _externalData.dataVersion > (data.dataVersion || 0)) {
+        var newSeed = deepMerge(JSON.parse(JSON.stringify(DEFAULT_DATA)), _externalData);
+        saveAllData(newSeed);
+        return JSON.parse(JSON.stringify(newSeed));
+      }
       var base = _externalData
         ? deepMerge(JSON.parse(JSON.stringify(DEFAULT_DATA)), _externalData)
         : JSON.parse(JSON.stringify(DEFAULT_DATA));
