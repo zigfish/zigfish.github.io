@@ -556,13 +556,17 @@
   function init() {
     renderCompanyInfo();
     renderCoverImage();
+    renderStats();
     renderSocialLinks();
     renderCategories();
+    renderAdvantages();
     renderCertificates();
     renderContactChat();
     renderInquiryForm();
     initWechatModal();
     initWhatsAppFloat();
+    initInquiryForm();
+    initScrollAnimations();
     initMobileMenu();
     initBackToTop();
     initModal();
