@@ -14,7 +14,8 @@ var DataManager = (function () {
       name: "", nameEn: "", address: "", addressEn: "",
       phone: "", email: "", intro: "", introEn: "", logo: "",
       stats: [],
-      advantages: []
+      advantages: [],
+      capabilities: []
     },
     social: { tiktok: "", facebook: "", linkedin: "" },
     categories: [],
@@ -99,6 +100,10 @@ var DataManager = (function () {
   function getCoverImage() { return getAllData().coverImage||""; }
   function getCertificates() { return getAllData().certificates; }
   function getCertificate(id) { return getAllData().certificates.find(function(c){return c.id===id;}); }
+  function getCapabilities() {
+    var co = getAllData().company;
+    return co.capabilities || [];
+  }
   function getContactSettings() {
     var d = getAllData();
     return { wechatQR: d.wechatQR||"", whatsapp: d.whatsapp||"" };
@@ -113,6 +118,7 @@ var DataManager = (function () {
     getCoverImage: getCoverImage,
     getCertificates: getCertificates,
     getCertificate: getCertificate,
+    getCapabilities: getCapabilities,
     getContactSettings: getContactSettings
   };
 })();

@@ -1,5 +1,5 @@
 {
-  "dataVersion": 2,
+  "dataVersion": 4,
   "company": {
     "name": "宿迁腾跃服饰有限公司",
     "nameEn": "SUQIAN TENGYUE GARMENT CO.,LTD",
@@ -14,22 +14,34 @@
       {
         "labelEn": "Years Experience",
         "labelCn": "行业经验",
-        "value": "15+"
+        "value": "15+",
+        "detailEn": "Since 2004, we have been deeply rooted in the garment industry. Our founder started as a quality inspector and worked through every link of the supply chain before establishing our own factory. This hands-on journey means we understand your expectations from the inside out — quality that meets international standards, timelines that you can count on, and communication that bridges cultures.",
+        "detailCn": "自2004年进入服装行业，从检验员到贸易商，从外资代表处到自建工厂，我们走过了完整的产业链历练。二十余年的积累，意味着我们对品质的理解不只是口号——我们知道出口标准的细节，理解交期对您生意的意义，也懂得跨文化沟通的温度。",
+        "image": ""
       },
       {
         "labelEn": "Factories",
         "labelCn": "生产基地",
-        "value": "5"
+        "value": "5",
+        "detailEn": "We operate five factories across Jiangsu and Shandong provinces, covering a total production area of over 15,000 square meters. Each factory specializes in different product categories — woven garments, PU outerwear, children's wear, and more — allowing us to match your specific order requirements with the most suitable production line.",
+        "detailCn": "我们在江苏、山东两省共设有五家工厂，总生产面积超过15,000平方米。每家工厂专注于不同的产品品类——梭织服装、PU外套、童装等——确保您的每一笔订单都能匹配最合适的生产线。",
+        "image": ""
       },
       {
         "labelEn": "Annual Output",
         "labelCn": "年产量",
-        "value": "1M+"
+        "value": "1M+",
+        "detailEn": "With an annual production capacity exceeding one million garments, we have the scale to handle both large-volume orders for established brands and flexible production runs for growing labels. Our ERP-managed production scheduling ensures transparent progress tracking from cutting to packing.",
+        "detailCn": "年产量突破百万件，我们既有规模化产能承接成熟品牌的大单，也有柔性生产线支持成长中品牌的小批量订单。ERP系统管理的生产排期，确保从裁剪到包装的每个环节都透明可追踪。",
+        "image": ""
       },
       {
         "labelEn": "Countries Exported",
         "labelCn": "出口国家",
-        "value": "30+"
+        "value": "30+",
+        "detailEn": "Our products have reached customers in more than 30 countries across Europe, North America, South America, Asia, and the Middle East. We have served leading retail chains, e-commerce brands, and boutique labels — each market has taught us something new about quality expectations, compliance requirements, and consumer preferences.",
+        "detailCn": "我们的产品远销欧洲、北美、南美、亚洲及中东等30多个国家和地区，服务过知名零售连锁、电商品牌及精品设计师品牌。每一个市场都让我们更深入地理解不同的品质标准、合规要求和消费偏好。",
+        "image": ""
       }
     ],
     "advantages": [
@@ -38,28 +50,70 @@
         "titleEn": "Reliable Delivery",
         "titleCn": "稳定交期",
         "descEn": "On-time delivery is our baseline, not a promise. We plan backward from your deadlines.",
-        "descCn": "准时交货是我们的基本线。我们从您的截止日期倒推计划。"
+        "descCn": "准时交货是我们的基本线。我们从您的截止日期倒推计划。",
+        "detailEn": "We understand that late delivery means missed selling seasons and lost revenue. That's why we build our production schedules backward from your required delivery date, factoring in fabric lead times, production capacity, and shipping. Our on-time delivery rate exceeds 97%, supported by weekly progress updates and real-time tracking.",
+        "detailCn": "我们深知，延期交货意味着错失销售季节和收入损失。因此我们从您的需求交货日期倒推排产，将面料交期、产能负荷和物流时效全部纳入计划。准时交货率超过97%，配合每周进度更新和实时追踪，让您全程安心。",
+        "image": ""
       },
       {
         "icon": "check-circle",
         "titleEn": "Quality Control",
         "titleCn": "品质管控",
         "descEn": "Multi-stage inspection throughout production, from raw fabric to finished garment.",
-        "descCn": "从面料入厂到成衣出货，全流程多道检验。"
+        "descCn": "从面料入厂到成衣出货，全流程多道检验。",
+        "detailEn": "Quality isn't inspected in — it's built in. Our multi-stage QC process covers: incoming fabric inspection (4-point system), inline production checks at every workstation, pre-final audit at 80% completion, and AQL 2.5 final random inspection before shipping. Every order comes with a detailed QC report.",
+        "detailCn": "品质不是检验出来的，而是做出来的。我们的多道品控流程包括：面料入厂检验（4分制标准）、各工位在线抽检、80%完成时的中期验货、出货前的AQL 2.5尾期随机抽检。每笔订单附详细品控报告。",
+        "image": ""
       },
       {
         "icon": "users",
         "titleEn": "Dedicated Team",
         "titleCn": "用心团队",
         "descEn": "Stable workforce averaging 8+ years. Low turnover means your orders stay in experienced hands.",
-        "descCn": "平均工龄8年以上的稳定团队，确保您的订单始终在熟练工人手中。"
+        "descCn": "平均工龄8年以上的稳定团队，确保您的订单始终在熟练工人手中。",
+        "detailEn": "The garment industry is built on hands — skilled hands that have sewn thousands of garments. Our core team has been with us since day one, with an average tenure of over 8 years. Low turnover isn't just a number; it means the person who made your sample will also oversee your production. Consistency is priceless.",
+        "detailCn": "服装行业靠的是手——缝过成千上万件衣服的熟练的手。我们的核心团队从建厂之初就在一起，平均工龄超过8年。低流动率不只是一个数字——它意味着为您打样的人和跟您大货的人是同一批人。这种一致性，无法复制。",
+        "image": ""
       },
       {
         "icon": "globe",
         "titleEn": "Global Experience",
         "titleCn": "全球经验",
         "descEn": "Served brands across 30+ countries. We understand diverse market requirements and compliance standards.",
-        "descCn": "服务过30多个国家的品牌，深谙不同市场的需求与合规标准。"
+        "descCn": "服务过30多个国家的品牌，深谙不同市场的需求与合规标准。",
+        "detailEn": "From European eco-textile standards to US CPSIA requirements, from Middle Eastern modesty preferences to Latin American size grading — we've learned the nuances of each market through real orders. Our compliance knowledge spans BSCI, OEKO-TEX, REACH, and more. Tell us your market, and we'll know the rules.",
+        "detailCn": "从欧盟生态纺织品标准到美国CPSIA法规，从中东市场的审美偏好到拉美市场的尺码体系——我们通过真实订单积累了各个市场的实战经验。合规知识涵盖BSCI、OEKO-TEX、REACH等标准。告诉我们您的目标市场，我们的团队就知道该遵守什么规则。",
+        "image": ""
+      }
+    ],
+    "capabilities": [
+      {
+        "icon": "clock",
+        "titleEn": "20+ Years",
+        "titleCn": "20+年行业经验",
+        "descEn": "Over two decades of garment manufacturing expertise, serving brands worldwide with proven reliability.",
+        "descCn": "二十余年服装制造经验，服务全球品牌，品质可靠。"
+      },
+      {
+        "icon": "link",
+        "titleEn": "Full Supply Chain Control",
+        "titleCn": "全供应链管控",
+        "descEn": "From sample development and pattern making to production, quality control, and logistics — all under one roof.",
+        "descCn": "从样衣开发、版型设计到生产、品控、物流，全链条一体化管理。"
+      },
+      {
+        "icon": "users",
+        "titleEn": "Stable & Experienced Workforce",
+        "titleCn": "稳定熟练的工人团队",
+        "descEn": "Average tenure of 8+ years. Low turnover ensures consistent quality and smooth production.",
+        "descCn": "平均工龄8年以上，低流动率确保品质稳定和生产顺畅。"
+      },
+      {
+        "icon": "package",
+        "titleEn": "Flexible MOQ — Small Orders Welcome",
+        "titleCn": "灵活起订量 — 欢迎小单",
+        "descEn": "We accommodate both large-scale production and smaller trial orders, perfect for new brands testing the market.",
+        "descCn": "支持大批量生产，也欢迎小批量试单，适合新品牌市场测试。"
       }
     ]
   },

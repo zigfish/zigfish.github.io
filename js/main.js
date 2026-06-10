@@ -221,6 +221,17 @@
         .join("");
     }
 
+    // Lightbox click handlers on gallery images
+    var imgs = gallery.querySelectorAll("img");
+    for (var g = 0; g < imgs.length; g++) {
+      (function (idx) {
+        imgs[g].addEventListener("click", function (e) {
+          e.stopPropagation();
+          openLightbox(cat.images, idx);
+        });
+      })(g);
+    }
+
     overlay.classList.add("active");
     document.body.style.overflow = "hidden";
   }
@@ -229,6 +240,103 @@
     var overlay = document.getElementById("modal-overlay");
     overlay.classList.remove("active");
     document.body.style.overflow = "";
+  }
+
+  // ---- Detail Modal (Stats & Advantages) ----
+  function openDetailModal(item) {
+    var overlay = document.getElementById("detail-modal");
+    var titleEn = document.getElementById("detail-title-en");
+    var titleCn = document.getElementById("detail-title-cn");
+    var textEn = document.getElementById("detail-text-en");
+    var textCn = document.getElementById("detail-text-cn");
+    var imageWrap = document.getElementById("detail-image-wrap");
+    var image = document.getElementById("detail-image");
+
+    titleEn.textContent = item.titleEn || item.labelEn || "";
+    titleCn.textContent = item.titleCn || item.labelCn || "";
+    textEn.textContent = item.detailEn || "";
+    textCn.textContent = item.detailCn || "";
+
+    if (item.image) {
+      image.src = item.image;
+      imageWrap.style.display = "";
+    } else {
+      imageWrap.style.display = "none";
+    }
+
+    overlay.classList.add("active");
+    document.body.style.overflow = "hidden";
+  }
+
+  function closeDetailModal() {
+    document.getElementById("detail-modal").classList.remove("active");
+    document.body.style.overflow = "";
+  }
+
+  function initDetailModal() {
+    document.getElementById("detail-modal-close").addEventListener("click", closeDetailModal);
+    document.getElementById("detail-modal").addEventListener("click", function (e) {
+      if (e.target === this) closeDetailModal();
+    });
+  }
+
+  // ---- Lightbox ----
+  var _lightboxImages = [];
+  var _lightboxIndex = 0;
+
+  function openLightbox(images, index) {
+    _lightboxImages = images;
+    _lightboxIndex = index;
+    updateLightboxImage();
+    document.getElementById("lightbox-modal").classList.add("active");
+    document.body.style.overflow = "hidden";
+  }
+
+  function updateLightboxImage() {
+    document.getElementById("lightbox-img").src = _lightboxImages[_lightboxIndex];
+    document.getElementById("lightbox-counter").textContent =
+      (_lightboxIndex + 1) + " / " + _lightboxImages.length;
+  }
+
+  function lightboxPrev() {
+    _lightboxIndex = (_lightboxIndex - 1 + _lightboxImages.length) % _lightboxImages.length;
+    updateLightboxImage();
+  }
+
+  function lightboxNext() {
+    _lightboxIndex = (_lightboxIndex + 1) % _lightboxImages.length;
+    updateLightboxImage();
+  }
+
+  function closeLightbox() {
+    document.getElementById("lightbox-modal").classList.remove("active");
+    document.body.style.overflow = "";
+  }
+
+  function initLightbox() {
+    document.getElementById("lightbox-close").addEventListener("click", closeLightbox);
+    document.getElementById("lightbox-prev").addEventListener("click", lightboxPrev);
+    document.getElementById("lightbox-next").addEventListener("click", lightboxNext);
+    document.getElementById("lightbox-modal").addEventListener("click", function (e) {
+      if (e.target === this) closeLightbox();
+    });
+  }
+
+  // ---- Combined Escape Handler ----
+  function initGlobalEscape() {
+    document.addEventListener("keydown", function (e) {
+      if (e.key !== "Escape") return;
+      var gallery = document.getElementById("modal-overlay");
+      var lightbox = document.getElementById("lightbox-modal");
+      var detail = document.getElementById("detail-modal");
+      var wechat = document.getElementById("wechat-modal");
+      if (lightbox.classList.contains("active")) closeLightbox();
+      else if (detail.classList.contains("active")) closeDetailModal();
+      else if (wechat.classList.contains("active")) {
+        wechat.classList.remove("active");
+        document.body.style.overflow = "";
+      } else if (gallery.classList.contains("active")) closeGallery();
+    });
   }
 
   // ---- Utility ----
@@ -316,7 +424,10 @@
       "users": '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>',
       "globe": '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>',
       "shield": '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><line x1="9" y1="12" x2="11" y2="14"/><line x1="11" y1="14" x2="15" y2="10"/></svg>',
-      "award": '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="7"/><polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"/></svg>'
+      "award": '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="7"/><polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"/></svg>',
+      "clock": '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>',
+      "link": '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>',
+      "package": '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><line x1="16.5" y1="9.4" x2="7.5" y2="4.21"/><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg>'
     };
     return icons[iconName] || icons["shield"];
   }
@@ -334,30 +445,55 @@
   // ---- Certificates ----
   function renderCertificates() {
     var certs = DataManager.getCertificates();
+    var caps = DataManager.getCapabilities();
     var grid = document.getElementById("certificates-grid");
-    if (!certs.length) {
+
+    if (!certs.length && !caps.length) {
       document.getElementById("certificates").style.display = "none";
       return;
     }
     document.getElementById("certificates").style.display = "";
-    grid.innerHTML = certs.map(function (cert) {
+
+    var html = '<div class="certs-layout">';
+
+    // Left column: main certificate (BSCI)
+    if (certs.length > 0) {
+      var cert = certs[0];
       var imgHtml = cert.image
         ? '<img src="' + escapeAttr(cert.image) + '" alt="' + escapeAttr(cert.nameEn || cert.name) + '">'
         : '<div class="cert-placeholder"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><polyline points="9 11 12 14 22 4"/></svg></div>';
       var downloadHtml = cert.file
         ? '<a class="cert-download btn btn-outline btn-sm" href="' + escapeAttr(cert.file) + '" target="_blank" rel="noopener">Download / 下载</a>'
         : "";
-      return (
+      html +=
+        '<div class="cert-main">' +
         '<div class="cert-card">' +
-        '<div class="cert-img">' + imgHtml + "</div>" +
+        '<div class="cert-img">' + imgHtml + '</div>' +
         '<div class="cert-info">' +
-        '<span class="en">' + escapeHtml(cert.nameEn || cert.name) + "</span>" +
-        '<span class="cn">' + escapeHtml(cert.name) + "</span>" +
+        '<span class="en">' + escapeHtml(cert.nameEn || cert.name) + '</span>' +
+        '<span class="cn">' + escapeHtml(cert.name) + '</span>' +
         downloadHtml +
-        "</div>" +
-        "</div>"
-      );
-    }).join("");
+        '</div></div></div>';
+    }
+
+    // Right column: capability icon-cards (2x2 grid)
+    if (caps.length > 0) {
+      html += '<div class="capabilities-grid">';
+      for (var i = 0; i < caps.length; i++) {
+        var cap = caps[i];
+        html +=
+          '<div class="capability-card">' +
+          '<div class="capability-icon">' + getAdvantageIcon(cap.icon || "shield") + '</div>' +
+          '<span class="capability-title-en">' + escapeHtml(cap.titleEn || "") + '</span>' +
+          '<span class="capability-title-cn">' + escapeHtml(cap.titleCn || "") + '</span>' +
+          '<p class="capability-desc">' + escapeHtml(cap.descEn || "") + '</p>' +
+          '</div>';
+      }
+      html += '</div>';
+    }
+
+    html += '</div>';
+    grid.innerHTML = html;
   }
 
 
@@ -380,6 +516,16 @@
         '</div>'
       );
     }).join("");
+
+    // Click handlers for detail modal
+    var items = grid.querySelectorAll(".stat-item");
+    for (var s = 0; s < items.length; s++) {
+      (function (stat) {
+        items[s].addEventListener("click", function () {
+          openDetailModal(stat);
+        });
+      })(stats[s]);
+    }
   }
 
   // ---- Render Advantages ----
@@ -402,6 +548,16 @@
         '</div>'
       );
     }).join("");
+
+    // Click handlers for detail modal
+    var advItems = grid.querySelectorAll(".advantage-card");
+    for (var a = 0; a < advItems.length; a++) {
+      (function (adv) {
+        advItems[a].addEventListener("click", function () {
+          openDetailModal(adv);
+        });
+      })(advantages[a]);
+    }
   }
 
   // ---- Form Submit Handler ----
@@ -441,7 +597,7 @@
   }
 
   // ---- Contact Chat Row (WeChat + WhatsApp) ----
-  function renderContactChat() {
+  function renderContact() {
     var settings = DataManager.getContactSettings();
     var row = document.getElementById("contact-chat-row");
     if (!settings.wechatQR && !settings.whatsapp) {
@@ -531,6 +687,21 @@
     wa.style.display = "";
   }
 
+  // ---- Social Floating Buttons ----
+  function renderSocialFloats() {
+    var social = DataManager.getSocialLinks();
+    var tiktok = document.getElementById("tiktok-float");
+    var facebook = document.getElementById("facebook-float");
+    if (social.tiktok) {
+      tiktok.href = social.tiktok;
+      tiktok.style.display = "";
+    }
+    if (social.facebook) {
+      facebook.href = social.facebook;
+      facebook.style.display = "";
+    }
+  }
+
   // ---- Active Nav Highlight ----
   function initNavHighlight() {
     var sections = document.querySelectorAll("section[id]");
@@ -561,10 +732,14 @@
     renderCategories();
     renderAdvantages();
     renderCertificates();
-    renderContactChat();
+    renderContact();
+    renderSocialFloats();
     renderInquiryForm();
     initWechatModal();
     initWhatsAppFloat();
+    initDetailModal();
+    initLightbox();
+    initGlobalEscape();
     initInquiryForm();
     initScrollAnimations();
     initMobileMenu();

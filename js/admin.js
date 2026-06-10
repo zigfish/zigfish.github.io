@@ -150,7 +150,8 @@
         intro: document.getElementById("co-intro").value.trim(),
         introEn: document.getElementById("co-intro-en").value.trim(),
         stats: collectStats(),
-        advantages: collectAdvantages()
+        advantages: collectAdvantages(),
+        capabilities: collectCapabilities()
       };
       try {
         DataManager.updateCompanyInfo(info);
@@ -590,8 +591,11 @@
       var labelEn = item.querySelector(".stat-label-en") ? item.querySelector(".stat-label-en").value.trim() : "";
       var labelCn = item.querySelector(".stat-label-cn") ? item.querySelector(".stat-label-cn").value.trim() : "";
       var value = item.querySelector(".stat-value") ? item.querySelector(".stat-value").value.trim() : "";
+      var detailEn = item.querySelector(".stat-detail-en") ? item.querySelector(".stat-detail-en").value.trim() : "";
+      var detailCn = item.querySelector(".stat-detail-cn") ? item.querySelector(".stat-detail-cn").value.trim() : "";
+      var image = item.querySelector(".stat-image-data") ? item.querySelector(".stat-image-data").value : "";
       if (labelEn || labelCn || value) {
-        stats.push({ labelEn: labelEn, labelCn: labelCn, value: value });
+        stats.push({ labelEn: labelEn, labelCn: labelCn, value: value, detailEn: detailEn, detailCn: detailCn, image: image });
       }
     }
     return stats;
@@ -602,14 +606,25 @@
     var stats = company.stats || [];
     var container = document.getElementById("stats-editor");
     if (!container) return;
-    var html = '<p style="font-size:11px;color:#999;margin-bottom:16px;">These numbers appear in the dark stats bar on the homepage. / 这些数据会显示在首页深色数据栏中。</p>';
+    var html = '<p style="font-size:11px;color:#999;margin-bottom:16px;">These numbers appear in the dark stats bar on the homepage. Clicking a stat opens a detail modal. / 点击首页数据卡片会弹出详情窗口。</p>';
     for (var i = 0; i < Math.max(stats.length, 4); i++) {
       var s = stats[i] || {};
-      html += '<div class="stat-editor-item" style="display:grid;grid-template-columns:1fr 1fr 1fr auto;gap:10px;margin-bottom:10px;align-items:end;">' +
+      html += '<div class="stat-editor-item" style="border:1px solid #eee;padding:12px;margin-bottom:10px;">' +
+        '<div style="display:grid;grid-template-columns:1fr 1fr 1fr auto;gap:10px;margin-bottom:8px;align-items:end;">' +
         '<div class="form-group" style="margin-bottom:0;"><label style="font-size:10px;">Value / 数值</label><input class="stat-value" value="' + escapeHtmlAttr(s.value||"") + '" placeholder="20+"></div>' +
         '<div class="form-group" style="margin-bottom:0;"><label style="font-size:10px;">Label (EN)</label><input class="stat-label-en" value="' + escapeHtmlAttr(s.labelEn||"") + '" placeholder="Years"></div>' +
         '<div class="form-group" style="margin-bottom:0;"><label style="font-size:10px;">Label (CN)</label><input class="stat-label-cn" value="' + escapeHtmlAttr(s.labelCn||"") + '" placeholder="行业经验"></div>' +
-        '<button class="btn btn-xs btn-danger stat-remove-btn" style="margin-bottom:0;">X</button>' +
+        '<button class="btn btn-xs btn-danger stat-remove-btn" style="align-self:start;">X</button>' +
+        '</div>' +
+        '<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:6px;">' +
+        '<div class="form-group" style="margin-bottom:0;"><label style="font-size:10px;">Detail Text (EN) / 详情（英文）</label><textarea class="stat-detail-en" rows="2" style="width:100%;font-size:12px;">' + escapeHtmlAttr(s.detailEn||"") + '</textarea></div>' +
+        '<div class="form-group" style="margin-bottom:0;"><label style="font-size:10px;">Detail Text (CN) / 详情（中文）</label><textarea class="stat-detail-cn" rows="2" style="width:100%;font-size:12px;">' + escapeHtmlAttr(s.detailCn||"") + '</textarea></div>' +
+        '</div>' +
+        '<div style="display:flex;align-items:center;gap:10px;">' +
+        '<button class="btn btn-outline btn-xs stat-img-upload-btn" data-idx="' + i + '">Upload Image / 上传图片</button>' +
+        '<span class="stat-img-name" style="font-size:10px;color:#999;">' + (s.image ? 'Image set' : 'No image') + '</span>' +
+        '<input type="hidden" class="stat-image-data" value="' + escapeHtmlAttr(s.image||"") + '">' +
+        '</div>' +
         '</div>';
     }
     html += '<button class="btn btn-outline btn-sm" id="add-stat-btn" style="margin-top:6px;">+ Add Stat / 添加数据</button>';
@@ -620,21 +635,60 @@
       addBtn.addEventListener("click", function () {
         var div = document.createElement("div");
         div.className = "stat-editor-item";
-        div.style.cssText = "display:grid;grid-template-columns:1fr 1fr 1fr auto;gap:10px;margin-bottom:10px;align-items:end;";
-        div.innerHTML = '<div class="form-group" style="margin-bottom:0;"><label style="font-size:10px;">Value</label><input class="stat-value" placeholder="20+"></div>' +
+        div.style.cssText = "border:1px solid #eee;padding:12px;margin-bottom:10px;";
+        div.innerHTML = '<div style="display:grid;grid-template-columns:1fr 1fr 1fr auto;gap:10px;margin-bottom:8px;align-items:end;">' +
+          '<div class="form-group" style="margin-bottom:0;"><label style="font-size:10px;">Value</label><input class="stat-value" placeholder="20+"></div>' +
           '<div class="form-group" style="margin-bottom:0;"><label style="font-size:10px;">Label (EN)</label><input class="stat-label-en" placeholder="Years"></div>' +
           '<div class="form-group" style="margin-bottom:0;"><label style="font-size:10px;">Label (CN)</label><input class="stat-label-cn" placeholder="行业经验"></div>' +
-          '<button class="btn btn-xs btn-danger stat-remove-btn" style="margin-bottom:0;">X</button>';
+          '<button class="btn btn-xs btn-danger stat-remove-btn" style="align-self:start;">X</button>' +
+          '</div>' +
+          '<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:6px;">' +
+          '<div class="form-group" style="margin-bottom:0;"><label style="font-size:10px;">Detail Text (EN)</label><textarea class="stat-detail-en" rows="2" style="width:100%;font-size:12px;"></textarea></div>' +
+          '<div class="form-group" style="margin-bottom:0;"><label style="font-size:10px;">Detail Text (CN)</label><textarea class="stat-detail-cn" rows="2" style="width:100%;font-size:12px;"></textarea></div>' +
+          '</div>' +
+          '<div style="display:flex;align-items:center;gap:10px;">' +
+          '<button class="btn btn-outline btn-xs stat-img-upload-btn">Upload Image</button>' +
+          '<span class="stat-img-name" style="font-size:10px;color:#999;">No image</span>' +
+          '<input type="hidden" class="stat-image-data" value="">' +
+          '</div>';
         addBtn.parentNode.insertBefore(div, addBtn);
-        div.querySelector(".stat-remove-btn").addEventListener("click", function () { div.remove(); });
+        bindStatItemEvents(div);
       });
     }
+    // Delegate image upload clicks
+    container.addEventListener("click", function(e) {
+      var uploadBtn = e.target.closest(".stat-img-upload-btn");
+      if (!uploadBtn) return;
+      e.stopPropagation();
+      var item = uploadBtn.closest(".stat-editor-item");
+      var nameSpan = item.querySelector(".stat-img-name");
+      var hiddenInput = item.querySelector(".stat-image-data");
+      var fileInput = document.createElement("input");
+      fileInput.type = "file";
+      fileInput.accept = "image/*";
+      fileInput.onchange = function() {
+        if (!this.files || !this.files[0]) return;
+        var file = this.files[0];
+        if (file.size > 1 * 1024 * 1024) { showToast("Image must be under 1MB", "error"); return; }
+        var reader = new FileReader();
+        reader.onload = function(e2) {
+          hiddenInput.value = e2.target.result;
+          nameSpan.textContent = "Image set";
+        };
+        reader.readAsDataURL(file);
+      };
+      fileInput.click();
+    });
     // Remove buttons
-    var removeBtns = container.querySelectorAll(".stat-remove-btn");
-    for (var j = 0; j < removeBtns.length; j++) {
-      removeBtns[j].addEventListener("click", function () {
-        this.parentElement.remove();
-      });
+    function bindStatItemEvents(el) {
+      var rmBtn = el.querySelector(".stat-remove-btn");
+      if (rmBtn) {
+        rmBtn.addEventListener("click", function () { el.remove(); });
+      }
+    }
+    var items = container.querySelectorAll(".stat-editor-item");
+    for (var j = 0; j < items.length; j++) {
+      bindStatItemEvents(items[j]);
     }
   }
 
@@ -649,8 +703,11 @@
       var titleCn = item.querySelector(".adv-title-cn") ? item.querySelector(".adv-title-cn").value.trim() : "";
       var descEn = item.querySelector(".adv-desc-en") ? item.querySelector(".adv-desc-en").value.trim() : "";
       var descCn = item.querySelector(".adv-desc-cn") ? item.querySelector(".adv-desc-cn").value.trim() : "";
+      var detailEn = item.querySelector(".adv-detail-en") ? item.querySelector(".adv-detail-en").value.trim() : "";
+      var detailCn = item.querySelector(".adv-detail-cn") ? item.querySelector(".adv-detail-cn").value.trim() : "";
+      var image = item.querySelector(".adv-image-data") ? item.querySelector(".adv-image-data").value : "";
       if (titleEn || titleCn) {
-        advantages.push({ icon: icon, titleEn: titleEn, titleCn: titleCn, descEn: descEn, descCn: descCn });
+        advantages.push({ icon: icon, titleEn: titleEn, titleCn: titleCn, descEn: descEn, descCn: descCn, detailEn: detailEn, detailCn: detailCn, image: image });
       }
     }
     return advantages;
@@ -682,9 +739,20 @@
         '<div class="form-group" style="margin-bottom:0;"><label style="font-size:10px;">Title (EN) / 英文标题</label><input class="adv-title-en" value="' + escapeHtmlAttr(a.titleEn||"") + '" placeholder="Reliable Delivery"></div>' +
         '</div>' +
         '<div class="form-group" style="margin-bottom:8px;"><label style="font-size:10px;">Title (CN) / 中文标题</label><input class="adv-title-cn" value="' + escapeHtmlAttr(a.titleCn||"") + '" placeholder="稳定交期"></div>' +
-        '<div class="form-group" style="margin-bottom:8px;"><label style="font-size:10px;">Description (EN) / 英文描述</label><textarea class="adv-desc-en" rows="2" style="width:100%;">' + escapeHtmlAttr(a.descEn||"") + '</textarea></div>' +
-        '<div class="form-group" style="margin-bottom:0;"><label style="font-size:10px;">Description (CN) / 中文描述</label><textarea class="adv-desc-cn" rows="2" style="width:100%;">' + escapeHtmlAttr(a.descCn||"") + '</textarea></div>' +
-        '<button class="btn btn-xs btn-danger adv-remove-btn" style="margin-top:8px;">Remove / 删除</button>' +
+        '<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:6px;">' +
+        '<div class="form-group" style="margin-bottom:0;"><label style="font-size:10px;">Description (EN)</label><textarea class="adv-desc-en" rows="2" style="width:100%;">' + escapeHtmlAttr(a.descEn||"") + '</textarea></div>' +
+        '<div class="form-group" style="margin-bottom:0;"><label style="font-size:10px;">Description (CN)</label><textarea class="adv-desc-cn" rows="2" style="width:100%;">' + escapeHtmlAttr(a.descCn||"") + '</textarea></div>' +
+        '</div>' +
+        '<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:6px;">' +
+        '<div class="form-group" style="margin-bottom:0;"><label style="font-size:10px;">Detail Text (EN)</label><textarea class="adv-detail-en" rows="2" style="width:100%;font-size:12px;">' + escapeHtmlAttr(a.detailEn||"") + '</textarea></div>' +
+        '<div class="form-group" style="margin-bottom:0;"><label style="font-size:10px;">Detail Text (CN)</label><textarea class="adv-detail-cn" rows="2" style="width:100%;font-size:12px;">' + escapeHtmlAttr(a.detailCn||"") + '</textarea></div>' +
+        '</div>' +
+        '<div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;">' +
+        '<button class="btn btn-outline btn-xs adv-img-upload-btn">Upload Image / 上传图片</button>' +
+        '<span class="adv-img-name" style="font-size:10px;color:#999;">' + (a.image ? 'Image set' : 'No image') + '</span>' +
+        '<input type="hidden" class="adv-image-data" value="' + escapeHtmlAttr(a.image||"") + '">' +
+        '</div>' +
+        '<button class="btn btn-xs btn-danger adv-remove-btn">Remove / 删除</button>' +
         '</div>';
     }
     html += '<button class="btn btn-outline btn-sm" id="add-adv-btn">+ Add Advantage / 添加优势</button>';
@@ -706,12 +774,52 @@
           '<div class="form-group" style="margin-bottom:0;"><label style="font-size:10px;">Title (EN)</label><input class="adv-title-en" placeholder="Reliable Delivery"></div>' +
           '</div>' +
           '<div class="form-group" style="margin-bottom:8px;"><label style="font-size:10px;">Title (CN)</label><input class="adv-title-cn" placeholder="稳定交期"></div>' +
-          '<div class="form-group" style="margin-bottom:8px;"><label style="font-size:10px;">Description (EN)</label><textarea class="adv-desc-en" rows="2" style="width:100%;"></textarea></div>' +
+          '<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:6px;">' +
+          '<div class="form-group" style="margin-bottom:0;"><label style="font-size:10px;">Description (EN)</label><textarea class="adv-desc-en" rows="2" style="width:100%;"></textarea></div>' +
           '<div class="form-group" style="margin-bottom:0;"><label style="font-size:10px;">Description (CN)</label><textarea class="adv-desc-cn" rows="2" style="width:100%;"></textarea></div>' +
-          '<button class="btn btn-xs btn-danger adv-remove-btn" style="margin-top:8px;">Remove</button>';
+          '</div>' +
+          '<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:6px;">' +
+          '<div class="form-group" style="margin-bottom:0;"><label style="font-size:10px;">Detail Text (EN)</label><textarea class="adv-detail-en" rows="2" style="width:100%;font-size:12px;"></textarea></div>' +
+          '<div class="form-group" style="margin-bottom:0;"><label style="font-size:10px;">Detail Text (CN)</label><textarea class="adv-detail-cn" rows="2" style="width:100%;font-size:12px;"></textarea></div>' +
+          '</div>' +
+          '<div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;">' +
+          '<button class="btn btn-outline btn-xs adv-img-upload-btn">Upload Image</button>' +
+          '<span class="adv-img-name" style="font-size:10px;color:#999;">No image</span>' +
+          '<input type="hidden" class="adv-image-data" value="">' +
+          '</div>' +
+          '<button class="btn btn-xs btn-danger adv-remove-btn">Remove</button>';
         addBtn.parentNode.insertBefore(div, addBtn);
-        div.querySelector(".adv-remove-btn").addEventListener("click", function () { div.remove(); });
+        bindAdvItemEvents(div);
       });
+    }
+    // Delegated image upload for advantages
+    container.addEventListener("click", function(e) {
+      var uploadBtn = e.target.closest(".adv-img-upload-btn");
+      if (!uploadBtn) return;
+      e.stopPropagation();
+      var item = uploadBtn.closest(".adv-editor-item");
+      var nameSpan = item.querySelector(".adv-img-name");
+      var hiddenInput = item.querySelector(".adv-image-data");
+      var fileInput = document.createElement("input");
+      fileInput.type = "file";
+      fileInput.accept = "image/*";
+      fileInput.onchange = function() {
+        if (!this.files || !this.files[0]) return;
+        var file = this.files[0];
+        if (file.size > 1 * 1024 * 1024) { showToast("Image must be under 1MB", "error"); return; }
+        var reader = new FileReader();
+        reader.onload = function(e2) {
+          hiddenInput.value = e2.target.result;
+          nameSpan.textContent = "Image set";
+        };
+        reader.readAsDataURL(file);
+      };
+      fileInput.click();
+    });
+    // Helpers
+    function bindAdvItemEvents(el) {
+      var rmBtn = el.querySelector(".adv-remove-btn");
+      if (rmBtn) rmBtn.addEventListener("click", function () { el.remove(); });
     }
     // Remove buttons
     var removeBtns = container.querySelectorAll(".adv-remove-btn");
@@ -727,10 +835,101 @@
     return str.replace(/&/g,"&amp;").replace(/"/g,"&quot;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/'/g,"&#39;");
   }
 
+  // ---- Capabilities Editor ----
+  function collectCapabilities() {
+    var items = document.querySelectorAll("#capabilities-editor .cap-editor-item");
+    var capabilities = [];
+    for (var i = 0; i < items.length; i++) {
+      var item = items[i];
+      var icon = item.querySelector(".cap-icon") ? item.querySelector(".cap-icon").value.trim() : "shield";
+      var titleEn = item.querySelector(".cap-title-en") ? item.querySelector(".cap-title-en").value.trim() : "";
+      var titleCn = item.querySelector(".cap-title-cn") ? item.querySelector(".cap-title-cn").value.trim() : "";
+      var descEn = item.querySelector(".cap-desc-en") ? item.querySelector(".cap-desc-en").value.trim() : "";
+      var descCn = item.querySelector(".cap-desc-cn") ? item.querySelector(".cap-desc-cn").value.trim() : "";
+      if (titleEn || titleCn) {
+        capabilities.push({ icon: icon, titleEn: titleEn, titleCn: titleCn, descEn: descEn, descCn: descCn });
+      }
+    }
+    return capabilities;
+  }
+
+  function renderCapabilitiesEditor() {
+    var company = DataManager.getCompanyInfo();
+    var capabilities = company.capabilities || [];
+    var container = document.getElementById("capabilities-editor");
+    if (!container) return;
+    var iconOptions = [
+      { val: "clock", label: "Clock (Time)" },
+      { val: "link", label: "Link (Chain)" },
+      { val: "users", label: "Users (Team)" },
+      { val: "package", label: "Package (Box)" },
+      { val: "shield", label: "Shield (Trust)" },
+      { val: "award", label: "Award (Excellence)" }
+    ];
+    var html = '<p style="font-size:11px;color:#999;margin-bottom:16px;">These icons appear next to the BSCI certificate on the homepage. / 这些图标出现在首页BSCI证书旁边。</p>';
+    for (var i = 0; i < Math.max(capabilities.length, 4); i++) {
+      var c = capabilities[i] || {};
+      html += '<div class="cap-editor-item" style="border:1px solid #eee;padding:14px;margin-bottom:12px;">' +
+        '<div style="display:grid;grid-template-columns:1fr 2fr;gap:10px;margin-bottom:8px;">' +
+        '<div class="form-group" style="margin-bottom:0;"><label style="font-size:10px;">Icon</label><select class="cap-icon">';
+      for (var k = 0; k < iconOptions.length; k++) {
+        html += '<option value="' + iconOptions[k].val + '"' + (c.icon === iconOptions[k].val ? ' selected' : '') + '>' + iconOptions[k].label + '</option>';
+      }
+      html += '</select></div>' +
+        '<div class="form-group" style="margin-bottom:0;"><label style="font-size:10px;">Title (EN)</label><input class="cap-title-en" value="' + escapeHtmlAttr(c.titleEn||"") + '" placeholder="20+ Years"></div>' +
+        '</div>' +
+        '<div class="form-group" style="margin-bottom:8px;"><label style="font-size:10px;">Title (CN)</label><input class="cap-title-cn" value="' + escapeHtmlAttr(c.titleCn||"") + '" placeholder="20+年行业经验"></div>' +
+        '<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:6px;">' +
+        '<div class="form-group" style="margin-bottom:0;"><label style="font-size:10px;">Description (EN)</label><textarea class="cap-desc-en" rows="2" style="width:100%;">' + escapeHtmlAttr(c.descEn||"") + '</textarea></div>' +
+        '<div class="form-group" style="margin-bottom:0;"><label style="font-size:10px;">Description (CN)</label><textarea class="cap-desc-cn" rows="2" style="width:100%;">' + escapeHtmlAttr(c.descCn||"") + '</textarea></div>' +
+        '</div>' +
+        '<button class="btn btn-xs btn-danger cap-remove-btn">Remove / 删除</button>' +
+        '</div>';
+    }
+    html += '<button class="btn btn-outline btn-sm" id="add-cap-btn">+ Add Capability / 添加能力</button>';
+    container.innerHTML = html;
+    var addBtn = document.getElementById("add-cap-btn");
+    if (addBtn) {
+      addBtn.addEventListener("click", function () {
+        var div = document.createElement("div");
+        div.className = "cap-editor-item";
+        div.style.cssText = "border:1px solid #eee;padding:14px;margin-bottom:12px;";
+        var iconSel = '<select class="cap-icon">';
+        for (var k = 0; k < iconOptions.length; k++) {
+          iconSel += '<option value="' + iconOptions[k].val + '">' + iconOptions[k].label + '</option>';
+        }
+        iconSel += '</select>';
+        div.innerHTML = '<div style="display:grid;grid-template-columns:1fr 2fr;gap:10px;margin-bottom:8px;">' +
+          '<div class="form-group" style="margin-bottom:0;"><label style="font-size:10px;">Icon</label>' + iconSel + '</div>' +
+          '<div class="form-group" style="margin-bottom:0;"><label style="font-size:10px;">Title (EN)</label><input class="cap-title-en" placeholder="20+ Years"></div>' +
+          '</div>' +
+          '<div class="form-group" style="margin-bottom:8px;"><label style="font-size:10px;">Title (CN)</label><input class="cap-title-cn" placeholder="20+年行业经验"></div>' +
+          '<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:6px;">' +
+          '<div class="form-group" style="margin-bottom:0;"><label style="font-size:10px;">Description (EN)</label><textarea class="cap-desc-en" rows="2" style="width:100%;"></textarea></div>' +
+          '<div class="form-group" style="margin-bottom:0;"><label style="font-size:10px;">Description (CN)</label><textarea class="cap-desc-cn" rows="2" style="width:100%;"></textarea></div>' +
+          '</div>' +
+          '<button class="btn btn-xs btn-danger cap-remove-btn">Remove</button>';
+        addBtn.parentNode.insertBefore(div, addBtn);
+        bindCapItemEvents(div);
+      });
+    }
+    function bindCapItemEvents(el) {
+      var rmBtn = el.querySelector(".cap-remove-btn");
+      if (rmBtn) rmBtn.addEventListener("click", function () { el.remove(); });
+    }
+    var removeBtns = container.querySelectorAll(".cap-remove-btn");
+    for (var j = 0; j < removeBtns.length; j++) {
+      removeBtns[j].addEventListener("click", function () {
+        this.parentElement.remove();
+      });
+    }
+  }
+
   // Init editors in initCompanyForm
   function initStatsAndAdvantages() {
     renderStatsEditor();
     renderAdvantagesEditor();
+    renderCapabilitiesEditor();
   }
 
   // ---- Export Data ----

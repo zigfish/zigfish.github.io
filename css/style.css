@@ -1565,7 +1565,7 @@ ul {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
   gap: 16px;
-  max-width: 640px;
+  max-width: 1000px;
   margin: 0 auto;
 }
 
@@ -1751,6 +1751,286 @@ ul {
   transform: scale(1.1);
 }
 
+/* ---------- Detail Modal (Stats & Advantages) ---------- */
+.detail-overlay {
+  justify-content: center;
+}
+
+.detail-modal-content {
+  max-width: 700px;
+  width: 92vw;
+  background: #111;
+  color: #fff;
+}
+
+.detail-modal-body {
+  padding: 28px 32px;
+  overflow-y: auto;
+  max-height: 70vh;
+}
+
+.detail-image-wrap {
+  margin-bottom: 24px;
+  background: #1a1a1a;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 200px;
+  max-height: 300px;
+  overflow: hidden;
+}
+
+.detail-image-wrap img {
+  width: 100%;
+  height: 100%;
+  max-height: 300px;
+  object-fit: contain;
+}
+
+.detail-text-en {
+  font-family: var(--font-body);
+  font-size: 14px;
+  line-height: 1.85;
+  color: rgba(255,255,255,0.85);
+  margin-bottom: 20px;
+}
+
+.detail-text-cn {
+  font-family: var(--font-body);
+  font-size: 13px;
+  line-height: 1.85;
+  color: rgba(255,255,255,0.55);
+}
+
+/* ---------- Lightbox ---------- */
+.lightbox-overlay {
+  z-index: 250;
+  cursor: zoom-out;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0,0,0,0.96);
+}
+
+.lightbox-overlay.active {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.lightbox-img {
+  max-width: 90vw;
+  max-height: 90vh;
+  object-fit: contain;
+}
+
+.lightbox-close {
+  position: fixed;
+  top: 20px;
+  right: 24px;
+  z-index: 251;
+  width: 44px;
+  height: 44px;
+  font-size: 28px;
+  color: #888;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: none;
+  border: none;
+  cursor: pointer;
+  transition: color 0.25s ease;
+}
+
+.lightbox-close:hover { color: #fff; }
+
+.lightbox-arrow {
+  position: fixed;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 251;
+  width: 50px;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255,255,255,0.08);
+  border: none;
+  color: #ccc;
+  cursor: pointer;
+  transition: background 0.25s ease, color 0.25s ease;
+}
+
+.lightbox-arrow:hover {
+  background: rgba(255,255,255,0.18);
+  color: #fff;
+}
+
+.lightbox-prev { left: 16px; }
+.lightbox-next { right: 16px; }
+
+.lightbox-counter {
+  position: fixed;
+  bottom: 28px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 251;
+  font-family: var(--font-body);
+  font-size: 13px;
+  color: rgba(255,255,255,0.5);
+  letter-spacing: 1px;
+}
+
+/* ---------- Social Floats ---------- */
+.social-float {
+  position: fixed;
+  right: 32px;
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
+  background: var(--color-bg-dark);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.25);
+  z-index: 48;
+  transition: transform 0.3s ease, background 0.3s ease;
+}
+
+.social-float:hover {
+  transform: scale(1.1);
+}
+
+.tiktok-float {
+  bottom: 150px;
+}
+
+.tiktok-float:hover {
+  background: #000;
+}
+
+.facebook-float {
+  bottom: 210px;
+}
+
+.facebook-float:hover {
+  background: #1877f2;
+}
+
+/* ---------- Certificates Dual Layout ---------- */
+.certs-layout {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.cert-main {
+  display: flex;
+}
+
+.cert-main .cert-card {
+  width: 100%;
+  border: 1px solid var(--color-border);
+}
+
+.cert-main .cert-img {
+  height: 280px;
+}
+
+.capabilities-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+  align-content: start;
+}
+
+.capability-card {
+  background: #fff;
+  border: 1px solid var(--color-border);
+  padding: 24px 18px 20px;
+  text-align: center;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.capability-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-lg);
+}
+
+.capability-icon {
+  width: 44px;
+  height: 44px;
+  margin: 0 auto 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--color-bg-dark);
+  color: var(--color-accent);
+}
+
+.capability-icon svg {
+  width: 20px;
+  height: 20px;
+}
+
+.capability-title-en {
+  display: block;
+  font-family: var(--font-heading);
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--color-text);
+  margin-bottom: 4px;
+}
+
+.capability-title-cn {
+  display: block;
+  font-family: var(--font-body);
+  font-size: 12px;
+  color: var(--color-text-light);
+  margin-bottom: 8px;
+}
+
+.capability-desc {
+  font-family: var(--font-body);
+  font-size: 11px;
+  color: var(--color-text-lighter);
+  line-height: 1.6;
+}
+
+/* ---------- About Typography ---------- */
+.about-content .en,
+.about-content .cn {
+  max-width: 800px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.about-content .en {
+  line-height: 2.2;
+}
+
+.about-content .cn {
+  line-height: 2.0;
+}
+
+.about-content {
+  gap: 28px;
+}
+
+/* ---------- Stat Item Clickable ---------- */
+.stat-item {
+  cursor: pointer;
+}
+
+/* ---------- Advantage Card Clickable ---------- */
+.advantage-card {
+  cursor: pointer;
+}
+
 /* ---------- Responsive ---------- */
 @media (max-width: 1024px) {
   .category-grid {
@@ -1895,6 +2175,29 @@ ul {
     height: 180px;
   }
 
+  .certs-layout {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+
+  .cert-main .cert-img {
+    height: 200px;
+  }
+
+  .capabilities-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .detail-modal-body {
+    padding: 20px;
+  }
+
+  .detail-text-en { font-size: 13px; }
+  .detail-text-cn { font-size: 12px; }
+
+  .lightbox-arrow { width: 40px; height: 40px; }
+  .social-float { right: 16px; width: 42px; height: 42px; }
+
   /* Admin */
   .admin-sidebar {
     width: 100%;
@@ -2032,5 +2335,45 @@ ul {
 
   .cert-img {
     height: 160px;
+  }
+
+  .certs-layout {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  .capabilities-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .cert-main .cert-img {
+    height: 180px;
+  }
+
+  .detail-modal-content {
+    width: 95vw;
+  }
+
+  .detail-modal-body {
+    padding: 16px;
+    max-height: 65vh;
+  }
+
+  .detail-image-wrap {
+    min-height: 160px;
+    max-height: 220px;
+  }
+
+  .lightbox-arrow { width: 36px; height: 36px; }
+  .lightbox-arrow svg { width: 20px; height: 20px; }
+  .lightbox-close { top: 12px; right: 12px; }
+
+  .social-float { right: 12px; width: 40px; height: 40px; }
+  .social-float svg { width: 18px; height: 18px; }
+  .whatsapp-float { right: 12px; }
+
+  .about-content .en,
+  .about-content .cn {
+    max-width: 100%;
   }
 }

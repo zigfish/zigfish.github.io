@@ -8,7 +8,7 @@ var DataManager = (function () {
   var MAX_STORAGE = 5 * 1024 * 1024;
   var _defaultPassword = (function(){var a="YWRtaW4xMjM=";return atob(a);})();
 
-  var DATA_VERSION = 3;
+  var DATA_VERSION = 4;
 
   var DEFAULT_DATA = {
     dataVersion: 0,
@@ -24,16 +24,22 @@ var DataManager = (function () {
       introEn: "",
       logo: "",
       stats: [
-        { labelEn:"Years Experience", labelCn:"行业经验",   value:"20+" },
-        { labelEn:"Factories",        labelCn:"生产基地",   value:"5" },
-        { labelEn:"Annual Output",    labelCn:"年产量",     value:"1M+" },
-        { labelEn:"Countries Exported",labelCn:"出口国家",  value:"30+" }
+        { labelEn:"Years Experience", labelCn:"行业经验",   value:"15+", detailEn:"", detailCn:"", image:"" },
+        { labelEn:"Factories",        labelCn:"生产基地",   value:"5",   detailEn:"", detailCn:"", image:"" },
+        { labelEn:"Annual Output",    labelCn:"年产量",     value:"1M+", detailEn:"", detailCn:"", image:"" },
+        { labelEn:"Countries Exported",labelCn:"出口国家",  value:"30+", detailEn:"", detailCn:"", image:"" }
       ],
       advantages: [
-        { icon:"truck", titleEn:"Reliable Delivery", titleCn:"稳定交期", descEn:"On-time delivery is our baseline, not a promise. We plan backward from your deadlines.", descCn:"准时交货是我们的基本线。我们从您的截止日期倒推计划。" },
-        { icon:"check-circle", titleEn:"Quality Control", titleCn:"品质管控", descEn:"Multi-stage inspection throughout production, from raw fabric to finished garment.", descCn:"从面料入厂到成衣出货，全流程多道检验。" },
-        { icon:"users", titleEn:"Dedicated Team", titleCn:"用心团队", descEn:"Stable workforce averaging 8+ years. Low turnover means your orders stay in experienced hands.", descCn:"平均工龄8年以上的稳定团队，确保您的订单始终在熟练工人手中。" },
-        { icon:"globe", titleEn:"Global Experience", titleCn:"全球经验", descEn:"Served brands across 30+ countries. We understand diverse market requirements and compliance standards.", descCn:"服务过30多个国家的品牌，深谙不同市场的需求与合规标准。" }
+        { icon:"truck", titleEn:"Reliable Delivery", titleCn:"稳定交期", descEn:"On-time delivery is our baseline, not a promise. We plan backward from your deadlines.", descCn:"准时交货是我们的基本线。我们从您的截止日期倒推计划。", detailEn:"", detailCn:"", image:"" },
+        { icon:"check-circle", titleEn:"Quality Control", titleCn:"品质管控", descEn:"Multi-stage inspection throughout production, from raw fabric to finished garment.", descCn:"从面料入厂到成衣出货，全流程多道检验。", detailEn:"", detailCn:"", image:"" },
+        { icon:"users", titleEn:"Dedicated Team", titleCn:"用心团队", descEn:"Stable workforce averaging 8+ years. Low turnover means your orders stay in experienced hands.", descCn:"平均工龄8年以上的稳定团队，确保您的订单始终在熟练工人手中。", detailEn:"", detailCn:"", image:"" },
+        { icon:"globe", titleEn:"Global Experience", titleCn:"全球经验", descEn:"Served brands across 30+ countries. We understand diverse market requirements and compliance standards.", descCn:"服务过30多个国家的品牌，深谙不同市场的需求与合规标准。", detailEn:"", detailCn:"", image:"" }
+      ],
+      capabilities: [
+        { icon:"clock", titleEn:"20+ Years", titleCn:"20+年行业经验", descEn:"Over two decades of garment manufacturing expertise, serving brands worldwide with proven reliability.", descCn:"二十余年服装制造经验，服务全球品牌，品质可靠。" },
+        { icon:"link", titleEn:"Full Supply Chain Control", titleCn:"全供应链管控", descEn:"From sample development and pattern making to production, quality control, and logistics — all under one roof.", descCn:"从样衣开发、版型设计到生产、品控、物流，全链条一体化管理。" },
+        { icon:"users", titleEn:"Stable & Experienced Workforce", titleCn:"稳定熟练的工人团队", descEn:"Average tenure of 8+ years. Low turnover ensures consistent quality and smooth production.", descCn:"平均工龄8年以上，低流动率确保品质稳定和生产顺畅。" },
+        { icon:"package", titleEn:"Flexible MOQ — Small Orders Welcome", titleCn:"灵活起订量 — 欢迎小单", descEn:"We accommodate both large-scale production and smaller trial orders, perfect for new brands testing the market.", descCn:"支持大批量生产，也欢迎小批量试单，适合新品牌市场测试。" }
       ]
     },
     social: { tiktok: "", facebook: "", linkedin: "" },
