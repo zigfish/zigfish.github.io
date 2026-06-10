@@ -1,4 +1,4 @@
-/* ============================================================
+﻿/* ============================================================
    Fashion Factory - Bilingual Product Showcase
    Premium B2B Foreign Trade Aesthetic
    ============================================================ */
@@ -1318,6 +1318,244 @@ ul {
   font-weight: 700 !important;
 }
 
+
+/* ---------- Stats Counter ---------- */
+.stats-section {
+  background: var(--color-bg-dark);
+  color: #fff;
+  padding: 64px 0;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0;
+  text-align: center;
+}
+
+.stat-item {
+  padding: 0 20px;
+  border-right: 1px solid rgba(255,255,255,0.1);
+}
+
+.stat-item:last-child {
+  border-right: none;
+}
+
+.stat-number {
+  display: block;
+  font-family: var(--font-heading);
+  font-size: 48px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  color: var(--color-accent);
+  line-height: 1;
+  margin-bottom: 12px;
+  transition: color 0.3s ease;
+}
+
+.stat-item:hover .stat-number {
+  color: #fff;
+}
+
+.stat-label {
+  display: block;
+  font-family: var(--font-body);
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.5);
+}
+
+.stat-label-cn {
+  display: block;
+  font-family: var(--font-body);
+  font-size: 11px;
+  color: rgba(255,255,255,0.35);
+  margin-top: 4px;
+}
+
+/* ---------- Why Us / Advantages ---------- */
+.why-us-section {
+  background: #fafafa;
+  padding-bottom: 80px;
+}
+
+.advantages-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+}
+
+.advantage-card {
+  background: #fff;
+  padding: 40px 28px 32px;
+  text-align: center;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.advantage-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 32px rgba(0,0,0,0.08);
+}
+
+.advantage-icon {
+  width: 56px;
+  height: 56px;
+  margin: 0 auto 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--color-bg-dark);
+  color: var(--color-accent);
+  transition: background 0.25s ease, color 0.25s ease;
+}
+
+.advantage-card:hover .advantage-icon {
+  background: var(--color-accent);
+  color: #fff;
+}
+
+.advantage-icon svg {
+  width: 24px;
+  height: 24px;
+}
+
+.advantage-title-en {
+  display: block;
+  font-family: var(--font-heading);
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--color-text);
+  margin-bottom: 4px;
+}
+
+.advantage-title-cn {
+  display: block;
+  font-family: var(--font-body);
+  font-size: 13px;
+  color: var(--color-text-light);
+  margin-bottom: 14px;
+}
+
+.advantage-desc-en {
+  font-family: var(--font-body);
+  font-size: 12px;
+  color: var(--color-text-light);
+  line-height: 1.7;
+}
+
+/* ---------- Form Feedback ---------- */
+.form-feedback {
+  display: none;
+  padding: 10px 14px;
+  margin-bottom: 16px;
+  font-family: var(--font-body);
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+.form-feedback.success {
+  display: block;
+  background: #e8f5e9;
+  color: #2e7d32;
+}
+
+.form-feedback.error {
+  display: block;
+  background: #fce4ec;
+  color: #c62828;
+}
+
+.form-feedback.sending {
+  display: block;
+  background: #e3f2fd;
+  color: #1565c0;
+}
+
+.form-group .required {
+  color: #c62828;
+}
+
+/* ---------- WeChat Modal Overrides ---------- */
+.wechat-modal-content {
+  max-width: 360px;
+  background: #fff;
+}
+
+.wechat-modal-header {
+  border-bottom: 1px solid #eee;
+}
+
+.wechat-modal-header h3 {
+  color: #111;
+}
+
+.wechat-modal-header .modal-close {
+  color: #666;
+}
+
+.wechat-modal-body {
+  text-align: center;
+  padding: 32px;
+}
+
+.wechat-modal-body img {
+  width: 200px;
+  height: 200px;
+  margin: 0 auto;
+  display: block;
+}
+
+.wechat-scan-text {
+  margin-top: 12px;
+  font-family: var(--font-body);
+  font-size: 12px;
+  color: #666;
+}
+
+#wechat-id-text {
+  font-family: var(--font-body);
+  font-size: 11px;
+  color: #999;
+  margin-top: 4px;
+}
+
+/* ---------- Animations ---------- */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-in {
+  animation: fadeInUp 0.5s ease forwards;
+}
+
+/* ---------- Footer Enhanced ---------- */
+.footer-left {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  text-align: left;
+}
+
+.footer-tagline {
+  font-family: var(--font-body);
+  font-size: 11px;
+  color: #555;
+  letter-spacing: 0.5px;
+}
+
+
 /* ---------- Certificates ---------- */
 .certificates-section {
   padding: 0 0 60px;
@@ -1524,7 +1762,30 @@ ul {
   }
 }
 
+
 @media (max-width: 768px) {
+  .stats-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 24px 0;
+  }
+
+  .stat-item {
+    border-right: none;
+    padding: 0 12px;
+  }
+
+  .stat-item:nth-child(odd) {
+    border-right: 1px solid rgba(255,255,255,0.1);
+  }
+
+  .stat-number {
+    font-size: 36px;
+  }
+
+  .advantages-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
   :root {
     --header-height: 56px;
   }
@@ -1666,7 +1927,37 @@ ul {
   }
 }
 
+
 @media (max-width: 480px) {
+  .stats-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px 0;
+  }
+
+  .stat-item {
+    border-right: none;
+  }
+
+  .stat-item:nth-child(odd) {
+    border-right: 1px solid rgba(255,255,255,0.1);
+  }
+
+  .stat-number {
+    font-size: 30px;
+  }
+
+  .stat-label {
+    font-size: 11px;
+  }
+
+  .advantages-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .advantage-card {
+    padding: 32px 24px 28px;
+  }
+
   .container {
     padding: 0 16px;
   }

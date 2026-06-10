@@ -1,10 +1,53 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <!-- site-version: 2 -->
+  <!-- site-version: 3 -->
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Professional garment manufacturer with 20+ years experience. OEM/ODM services for sun protection, jackets, workwear, kids wear, padded jackets, beach shorts, sports wear. BSCI certified factory in Jiangsu, China.">
+  <meta name="keywords" content="garment factory, clothing manufacturer, OEM apparel, ODM clothing, sun protection wear, jackets, workwear, kids wear, padded jackets, beach shorts, sports wear, BSCI certified, China garment factory, Jiangsu manufacturer">
+
+  <!-- Open Graph -->
+  <meta property="og:title" content="Garment Factory - Professional Manufacturing">
+  <meta property="og:description" content="20+ years OEM/ODM garment manufacturer. BSCI certified. 5 factories, 1M+ annual output. Serving brands worldwide.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://zigfish-fashion.netlify.app">
+  <meta property="og:image" content="https://zigfish-fashion.netlify.app/images/cover.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:locale" content="en_US">
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Garment Factory - Professional Manufacturing">
+  <meta name="twitter:description" content="20+ years OEM/ODM garment manufacturer. BSCI certified. 5 factories, 1M+ annual output. Serving brands worldwide.">
+  <meta name="twitter:image" content="https://zigfish-fashion.netlify.app/images/cover.png">
+
+  <!-- Schema.org Structured Data -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "name": "Garment Factory",
+    "url": "https://zigfish-fashion.netlify.app",
+    "description": "Professional garment manufacturer with 20+ years experience. OEM/ODM services for worldwide brands.",
+    "address": {
+      "@type": "PostalAddress",
+      "addressCountry": "CN"
+    },
+    "contactPoint": {
+      "@type": "ContactPoint",
+      "contactType": "Sales"
+    }
+  }
+  </script>
+
   <title id="page-title">Garment Factory - Product Showcase</title>
+
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='4' fill='%23111'/><text x='50%25' y='55%25' dominant-baseline='middle' text-anchor='middle' fill='white' font-family='serif' font-size='18' font-weight='bold'>Z</text></svg>">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
@@ -23,7 +66,8 @@
         <ul class="nav-links" id="nav-links">
           <li><a href="#home" class="active">HOME</a></li>
           <li><a href="#products">PRODUCTS</a></li>
-          <li><a href="#certificates">CERTS</a></li>
+          <li><a href="#why-us">WHY US</a></li>
+          <li><a href="#certificates">CERTIFICATES</a></li>
           <li><a href="#about">ABOUT</a></li>
           <li><a href="#contact">CONTACT</a></li>
           <li><a href="#inquiry" class="nav-inquiry">INQUIRY</a></li>
@@ -49,20 +93,10 @@
     </div>
   </section>
 
-  <!-- About -->
-  <section id="about">
-    <div class="section-header">
-      <span class="en">About Us</span>
-      <span class="cn">关于我们</span>
-      <div class="divider"></div>
-    </div>
-    <div class="about-section">
-      <div class="container">
-        <div class="about-content">
-          <p class="en" id="about-text-en">Loading...</p>
-          <p class="cn" id="about-text-cn">加载中...</p>
-        </div>
-      </div>
+  <!-- Stats Counter -->
+  <section class="stats-section" id="stats-section">
+    <div class="container">
+      <div class="stats-grid" id="stats-grid"></div>
     </div>
   </section>
 
@@ -74,9 +108,19 @@
       <div class="divider"></div>
     </div>
     <div class="container">
-      <div class="category-grid" id="category-grid">
-        <!-- Rendered by JS -->
-      </div>
+      <div class="category-grid" id="category-grid"></div>
+    </div>
+  </section>
+
+  <!-- Why Us -->
+  <section class="why-us-section" id="why-us">
+    <div class="section-header">
+      <span class="en">Why Choose Us</span>
+      <span class="cn">为什么选择我们</span>
+      <div class="divider"></div>
+    </div>
+    <div class="container">
+      <div class="advantages-grid" id="advantages-grid"></div>
     </div>
   </section>
 
@@ -89,8 +133,23 @@
     </div>
     <div class="certificates-section">
       <div class="container">
-        <div class="certificates-grid" id="certificates-grid">
-          <!-- Rendered by JS -->
+        <div class="certificates-grid" id="certificates-grid"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- About -->
+  <section id="about">
+    <div class="section-header">
+      <span class="en">About Us</span>
+      <span class="cn">关于我们</span>
+      <div class="divider"></div>
+    </div>
+    <div class="about-section">
+      <div class="container">
+        <div class="about-content">
+          <p class="en" id="about-text-en">Professional garment manufacturer with 20+ years of industry experience, serving brands across 30+ countries with reliable OEM/ODM services.</p>
+          <p class="cn" id="about-text-cn">拥有20多年行业经验的专业服装制造商，为30多个国家的品牌提供可靠的OEM/ODM服务。</p>
         </div>
       </div>
     </div>
@@ -114,8 +173,8 @@
               </svg>
             </div>
             <span class="label">Address / 地址</span>
-            <span class="value" id="contact-address-en">Loading...</span>
-            <span class="value-cn" id="contact-address-cn"></span>
+            <span class="value" id="contact-address-en">Jiangsu Province, China</span>
+            <span class="value-cn" id="contact-address-cn">中国江苏省</span>
           </div>
           <div class="contact-item">
             <div class="icon">
@@ -124,7 +183,7 @@
               </svg>
             </div>
             <span class="label">Phone / 电话</span>
-            <span class="value" id="contact-phone">Loading...</span>
+            <span class="value" id="contact-phone">+86 15900923922</span>
           </div>
           <div class="contact-item">
             <div class="icon">
@@ -134,12 +193,10 @@
               </svg>
             </div>
             <span class="label">Email / 邮箱</span>
-            <span class="value" id="contact-email">Loading...</span>
+            <span class="value" id="contact-email">jackxinjinggarment@vip.163.com</span>
           </div>
         </div>
-        <div class="contact-chat-row" id="contact-chat-row">
-          <!-- Rendered by JS -->
-        </div>
+        <div class="contact-chat-row" id="contact-chat-row"></div>
       </div>
     </div>
   </section>
@@ -156,13 +213,16 @@
         <p class="inquiry-intro" id="inquiry-intro">Send us your requirements and we'll respond within 24 hours.<br>发送您的需求，我们会在24小时内回复。</p>
         <form class="inquiry-form" id="inquiry-form" netlify name="inquiry">
           <input type="hidden" name="form-name" value="inquiry">
+          <div style="position:absolute;left:-9999px;" aria-hidden="true">
+            <input type="text" name="_gotcha" tabindex="-1" autocomplete="off">
+          </div>
           <div class="field-pair">
             <div class="form-group">
-              <label>Name / 姓名</label>
+              <label>Name / 姓名 <span class="required">*</span></label>
               <input type="text" name="name" placeholder="Your name" required>
             </div>
             <div class="form-group">
-              <label>Email / 邮箱</label>
+              <label>Email / 邮箱 <span class="required">*</span></label>
               <input type="email" name="email" placeholder="your@email.com" required>
             </div>
           </div>
@@ -186,6 +246,7 @@
             <label>Message / 留言</label>
             <textarea name="message" rows="5" placeholder="Tell us your requirements / 描述您的需求..."></textarea>
           </div>
+          <div id="form-feedback" class="form-feedback"></div>
           <button type="submit" class="btn btn-primary">SUBMIT / 提交询价</button>
         </form>
       </div>
@@ -196,17 +257,20 @@
   <section class="social-section" id="social-section">
     <div class="container">
       <p class="social-label">Follow Us / 关注我们</p>
-      <div class="social-links" id="social-links">
-        <!-- Rendered by JS -->
-      </div>
+      <div class="social-links" id="social-links"></div>
     </div>
   </section>
 
   <!-- Footer -->
   <footer class="site-footer">
     <div class="container">
-      <span class="footer-brand" id="footer-name">GARMENT FACTORY</span>
-      <span>&copy; 2026 All Rights Reserved</span>
+      <div class="footer-left">
+        <span class="footer-brand" id="footer-name">GARMENT FACTORY</span>
+        <span class="footer-tagline">Professional Garment Manufacturing Since 2004</span>
+      </div>
+      <div class="footer-right">
+        <span>&copy; 2024 All Rights Reserved</span>
+      </div>
     </div>
   </footer>
 
@@ -218,7 +282,7 @@
           <h3 id="modal-title-en" style="display:inline;">Products</h3>
           <span class="cn-title" id="modal-title-cn"></span>
         </div>
-        <button class="modal-close" id="modal-close">&times;</button>
+        <button class="modal-close" id="modal-close" aria-label="Close gallery">&times;</button>
       </div>
       <div class="modal-body">
         <div class="modal-gallery" id="modal-gallery"></div>
@@ -233,15 +297,15 @@
 
   <!-- WeChat QR Modal -->
   <div class="modal-overlay" id="wechat-modal">
-    <div class="modal-content" style="max-width:360px;background:#fff;">
-      <div class="modal-header" style="border-bottom:1px solid #eee;">
-        <h3 style="color:#111;">WeChat / 微信</h3>
-        <button class="modal-close" id="wechat-modal-close" style="color:#666;">&times;</button>
+    <div class="modal-content wechat-modal-content">
+      <div class="modal-header wechat-modal-header">
+        <h3>WeChat / 微信</h3>
+        <button class="modal-close" id="wechat-modal-close" aria-label="Close">&times;</button>
       </div>
-      <div class="modal-body" style="text-align:center;padding:32px;">
-        <img id="wechat-qr-img" src="" alt="WeChat QR" style="width:200px;height:200px;margin:0 auto;display:block;">
-        <p style="margin-top:12px;font-size:12px;color:#666;">Scan to add / 扫码添加</p>
-        <p id="wechat-id-text" style="font-size:11px;color:#999;"></p>
+      <div class="modal-body wechat-modal-body">
+        <img id="wechat-qr-img" src="" alt="WeChat QR">
+        <p class="wechat-scan-text">Scan to add / 扫码添加</p>
+        <p id="wechat-id-text"></p>
       </div>
     </div>
   </div>

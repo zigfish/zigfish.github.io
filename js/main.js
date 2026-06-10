@@ -1,4 +1,4 @@
-/* ============================================================
+﻿/* ============================================================
    Fashion Factory - Public Site (Bilingual EN/CN)
    ============================================================ */
 
@@ -308,6 +308,19 @@
     }
   }
 
+  // ---- Icon SVGs ----
+  function getAdvantageIcon(iconName) {
+    var icons = {
+      "truck": '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>',
+      "check-circle": '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>',
+      "users": '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>',
+      "globe": '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>',
+      "shield": '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><line x1="9" y1="12" x2="11" y2="14"/><line x1="11" y1="14" x2="15" y2="10"/></svg>',
+      "award": '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="7"/><polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"/></svg>'
+    };
+    return icons[iconName] || icons["shield"];
+  }
+
   // ---- Cover Image ----
   function renderCoverImage() {
     var cover = DataManager.getCoverImage();
@@ -345,6 +358,86 @@
         "</div>"
       );
     }).join("");
+  }
+
+
+  // ---- Render Stats Counter ----
+  function renderStats() {
+    var company = DataManager.getCompanyInfo();
+    var stats = company.stats;
+    if (!stats || !stats.length) {
+      document.getElementById("stats-section").style.display = "none";
+      return;
+    }
+    document.getElementById("stats-section").style.display = "";
+    var grid = document.getElementById("stats-grid");
+    grid.innerHTML = stats.map(function (stat) {
+      return (
+        '<div class="stat-item">' +
+        '<span class="stat-number" data-value="' + escapeAttr(stat.value) + '">' + escapeHtml(stat.value) + '</span>' +
+        '<span class="stat-label">' + escapeHtml(stat.labelEn || "") + '</span>' +
+        '<span class="stat-label-cn">' + escapeHtml(stat.labelCn || "") + '</span>' +
+        '</div>'
+      );
+    }).join("");
+  }
+
+  // ---- Render Advantages ----
+  function renderAdvantages() {
+    var company = DataManager.getCompanyInfo();
+    var advantages = company.advantages;
+    if (!advantages || !advantages.length) {
+      document.getElementById("why-us").style.display = "none";
+      return;
+    }
+    document.getElementById("why-us").style.display = "";
+    var grid = document.getElementById("advantages-grid");
+    grid.innerHTML = advantages.map(function (adv) {
+      return (
+        '<div class="advantage-card animate-in">' +
+        '<div class="advantage-icon">' + getAdvantageIcon(adv.icon || "shield") + '</div>' +
+        '<span class="advantage-title-en">' + escapeHtml(adv.titleEn || "") + '</span>' +
+        '<span class="advantage-title-cn">' + escapeHtml(adv.titleCn || "") + '</span>' +
+        '<p class="advantage-desc-en">' + escapeHtml(adv.descEn || "") + '</p>' +
+        '</div>'
+      );
+    }).join("");
+  }
+
+  // ---- Form Submit Handler ----
+  function initInquiryForm() {
+    var form = document.getElementById("inquiry-form");
+    if (!form) return;
+    var feedback = document.getElementById("form-feedback");
+    form.addEventListener("submit", function (e) {
+      var name = form.querySelector('[name="name"]').value.trim();
+      var email = form.querySelector('[name="email"]').value.trim();
+      if (!name || !email) {
+        e.preventDefault();
+        if (feedback) { feedback.className = "form-feedback error"; feedback.textContent = "Please fill in Name and Email / 请填写姓名和邮箱"; }
+        return;
+      }
+      if (feedback) { feedback.className = "form-feedback sending"; feedback.textContent = "Sending... / 发送中..."; }
+      // Let Netlify handle the actual submission
+      setTimeout(function () {
+        if (feedback) { feedback.className = "form-feedback success"; feedback.textContent = "Thank you! We will respond within 24 hours. / 感谢您的询价！我们会在24小时内回复。"; }
+      }, 1500);
+    });
+  }
+
+  // ---- Scroll Animation ----
+  function initScrollAnimations() {
+    var observer = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (entry.isIntersecting) {
+          entry.target.classList.add("animate-in");
+        }
+      });
+    }, { threshold: 0.15 });
+    var cards = document.querySelectorAll(".advantage-card, .stat-item");
+    for (var i = 0; i < cards.length; i++) {
+      observer.observe(cards[i]);
+    }
   }
 
   // ---- Contact Chat Row (WeChat + WhatsApp) ----

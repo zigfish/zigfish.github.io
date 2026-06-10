@@ -1,4 +1,4 @@
-/* ============================================================
+﻿/* ============================================================
    Fashion Factory - Admin Panel (Bilingual + Social)
    ============================================================ */
 
@@ -138,6 +138,7 @@
   }
 
   function initCompanyForm() {
+    initStatsAndAdvantages();
     document.getElementById("save-company-btn").addEventListener("click", function () {
       var info = {
         name: document.getElementById("co-name").value.trim(),
@@ -147,7 +148,9 @@
         phone: document.getElementById("co-phone").value.trim(),
         email: document.getElementById("co-email").value.trim(),
         intro: document.getElementById("co-intro").value.trim(),
-        introEn: document.getElementById("co-intro-en").value.trim()
+        introEn: document.getElementById("co-intro-en").value.trim(),
+        stats: collectStats(),
+        advantages: collectAdvantages()
       };
       try {
         DataManager.updateCompanyInfo(info);
@@ -575,6 +578,159 @@
 
   function escapeAttr(str) {
     return str.replace(/&/g, "&amp;").replace(/"/g, "&quot;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/'/g, "&#39;");
+  }
+
+
+  // ---- Stats Editor ----
+  function collectStats() {
+    var items = document.querySelectorAll("#stats-editor .stat-editor-item");
+    var stats = [];
+    for (var i = 0; i < items.length; i++) {
+      var item = items[i];
+      var labelEn = item.querySelector(".stat-label-en") ? item.querySelector(".stat-label-en").value.trim() : "";
+      var labelCn = item.querySelector(".stat-label-cn") ? item.querySelector(".stat-label-cn").value.trim() : "";
+      var value = item.querySelector(".stat-value") ? item.querySelector(".stat-value").value.trim() : "";
+      if (labelEn || labelCn || value) {
+        stats.push({ labelEn: labelEn, labelCn: labelCn, value: value });
+      }
+    }
+    return stats;
+  }
+
+  function renderStatsEditor() {
+    var company = DataManager.getCompanyInfo();
+    var stats = company.stats || [];
+    var container = document.getElementById("stats-editor");
+    if (!container) return;
+    var html = '<p style="font-size:11px;color:#999;margin-bottom:16px;">These numbers appear in the dark stats bar on the homepage. / 这些数据会显示在首页深色数据栏中。</p>';
+    for (var i = 0; i < Math.max(stats.length, 4); i++) {
+      var s = stats[i] || {};
+      html += '<div class="stat-editor-item" style="display:grid;grid-template-columns:1fr 1fr 1fr auto;gap:10px;margin-bottom:10px;align-items:end;">' +
+        '<div class="form-group" style="margin-bottom:0;"><label style="font-size:10px;">Value / 数值</label><input class="stat-value" value="' + escapeHtmlAttr(s.value||"") + '" placeholder="20+"></div>' +
+        '<div class="form-group" style="margin-bottom:0;"><label style="font-size:10px;">Label (EN)</label><input class="stat-label-en" value="' + escapeHtmlAttr(s.labelEn||"") + '" placeholder="Years"></div>' +
+        '<div class="form-group" style="margin-bottom:0;"><label style="font-size:10px;">Label (CN)</label><input class="stat-label-cn" value="' + escapeHtmlAttr(s.labelCn||"") + '" placeholder="行业经验"></div>' +
+        '<button class="btn btn-xs btn-danger stat-remove-btn" style="margin-bottom:0;">X</button>' +
+        '</div>';
+    }
+    html += '<button class="btn btn-outline btn-sm" id="add-stat-btn" style="margin-top:6px;">+ Add Stat / 添加数据</button>';
+    container.innerHTML = html;
+    // Add stat button
+    var addBtn = document.getElementById("add-stat-btn");
+    if (addBtn) {
+      addBtn.addEventListener("click", function () {
+        var div = document.createElement("div");
+        div.className = "stat-editor-item";
+        div.style.cssText = "display:grid;grid-template-columns:1fr 1fr 1fr auto;gap:10px;margin-bottom:10px;align-items:end;";
+        div.innerHTML = '<div class="form-group" style="margin-bottom:0;"><label style="font-size:10px;">Value</label><input class="stat-value" placeholder="20+"></div>' +
+          '<div class="form-group" style="margin-bottom:0;"><label style="font-size:10px;">Label (EN)</label><input class="stat-label-en" placeholder="Years"></div>' +
+          '<div class="form-group" style="margin-bottom:0;"><label style="font-size:10px;">Label (CN)</label><input class="stat-label-cn" placeholder="行业经验"></div>' +
+          '<button class="btn btn-xs btn-danger stat-remove-btn" style="margin-bottom:0;">X</button>';
+        addBtn.parentNode.insertBefore(div, addBtn);
+        div.querySelector(".stat-remove-btn").addEventListener("click", function () { div.remove(); });
+      });
+    }
+    // Remove buttons
+    var removeBtns = container.querySelectorAll(".stat-remove-btn");
+    for (var j = 0; j < removeBtns.length; j++) {
+      removeBtns[j].addEventListener("click", function () {
+        this.parentElement.remove();
+      });
+    }
+  }
+
+  // ---- Advantages Editor ----
+  function collectAdvantages() {
+    var items = document.querySelectorAll("#advantages-editor .adv-editor-item");
+    var advantages = [];
+    for (var i = 0; i < items.length; i++) {
+      var item = items[i];
+      var icon = item.querySelector(".adv-icon") ? item.querySelector(".adv-icon").value.trim() : "shield";
+      var titleEn = item.querySelector(".adv-title-en") ? item.querySelector(".adv-title-en").value.trim() : "";
+      var titleCn = item.querySelector(".adv-title-cn") ? item.querySelector(".adv-title-cn").value.trim() : "";
+      var descEn = item.querySelector(".adv-desc-en") ? item.querySelector(".adv-desc-en").value.trim() : "";
+      var descCn = item.querySelector(".adv-desc-cn") ? item.querySelector(".adv-desc-cn").value.trim() : "";
+      if (titleEn || titleCn) {
+        advantages.push({ icon: icon, titleEn: titleEn, titleCn: titleCn, descEn: descEn, descCn: descCn });
+      }
+    }
+    return advantages;
+  }
+
+  function renderAdvantagesEditor() {
+    var company = DataManager.getCompanyInfo();
+    var advantages = company.advantages || [];
+    var container = document.getElementById("advantages-editor");
+    if (!container) return;
+    var iconOptions = [
+      { val: "truck", label: "Truck (Delivery)" },
+      { val: "check-circle", label: "Check (Quality)" },
+      { val: "users", label: "Users (Team)" },
+      { val: "globe", label: "Globe (Global)" },
+      { val: "shield", label: "Shield (Trust)" },
+      { val: "award", label: "Award (Excellence)" }
+    ];
+    var html = '<p style="font-size:11px;color:#999;margin-bottom:16px;">These cards appear in the "Why Choose Us" section. / 这些卡片会显示在"为什么选择我们"板块。</p>';
+    for (var i = 0; i < Math.max(advantages.length, 4); i++) {
+      var a = advantages[i] || {};
+      html += '<div class="adv-editor-item" style="border:1px solid #eee;padding:14px;margin-bottom:12px;">' +
+        '<div style="display:grid;grid-template-columns:1fr 2fr;gap:10px;margin-bottom:8px;">' +
+        '<div class="form-group" style="margin-bottom:0;"><label style="font-size:10px;">Icon</label><select class="adv-icon">';
+      for (var k = 0; k < iconOptions.length; k++) {
+        html += '<option value="' + iconOptions[k].val + '"' + (a.icon === iconOptions[k].val ? ' selected' : '') + '>' + iconOptions[k].label + '</option>';
+      }
+      html += '</select></div>' +
+        '<div class="form-group" style="margin-bottom:0;"><label style="font-size:10px;">Title (EN) / 英文标题</label><input class="adv-title-en" value="' + escapeHtmlAttr(a.titleEn||"") + '" placeholder="Reliable Delivery"></div>' +
+        '</div>' +
+        '<div class="form-group" style="margin-bottom:8px;"><label style="font-size:10px;">Title (CN) / 中文标题</label><input class="adv-title-cn" value="' + escapeHtmlAttr(a.titleCn||"") + '" placeholder="稳定交期"></div>' +
+        '<div class="form-group" style="margin-bottom:8px;"><label style="font-size:10px;">Description (EN) / 英文描述</label><textarea class="adv-desc-en" rows="2" style="width:100%;">' + escapeHtmlAttr(a.descEn||"") + '</textarea></div>' +
+        '<div class="form-group" style="margin-bottom:0;"><label style="font-size:10px;">Description (CN) / 中文描述</label><textarea class="adv-desc-cn" rows="2" style="width:100%;">' + escapeHtmlAttr(a.descCn||"") + '</textarea></div>' +
+        '<button class="btn btn-xs btn-danger adv-remove-btn" style="margin-top:8px;">Remove / 删除</button>' +
+        '</div>';
+    }
+    html += '<button class="btn btn-outline btn-sm" id="add-adv-btn">+ Add Advantage / 添加优势</button>';
+    container.innerHTML = html;
+    // Add advantage button
+    var addBtn = document.getElementById("add-adv-btn");
+    if (addBtn) {
+      addBtn.addEventListener("click", function () {
+        var div = document.createElement("div");
+        div.className = "adv-editor-item";
+        div.style.cssText = "border:1px solid #eee;padding:14px;margin-bottom:12px;";
+        var iconSel = '<select class="adv-icon">';
+        for (var k = 0; k < iconOptions.length; k++) {
+          iconSel += '<option value="' + iconOptions[k].val + '">' + iconOptions[k].label + '</option>';
+        }
+        iconSel += '</select>';
+        div.innerHTML = '<div style="display:grid;grid-template-columns:1fr 2fr;gap:10px;margin-bottom:8px;">' +
+          '<div class="form-group" style="margin-bottom:0;"><label style="font-size:10px;">Icon</label>' + iconSel + '</div>' +
+          '<div class="form-group" style="margin-bottom:0;"><label style="font-size:10px;">Title (EN)</label><input class="adv-title-en" placeholder="Reliable Delivery"></div>' +
+          '</div>' +
+          '<div class="form-group" style="margin-bottom:8px;"><label style="font-size:10px;">Title (CN)</label><input class="adv-title-cn" placeholder="稳定交期"></div>' +
+          '<div class="form-group" style="margin-bottom:8px;"><label style="font-size:10px;">Description (EN)</label><textarea class="adv-desc-en" rows="2" style="width:100%;"></textarea></div>' +
+          '<div class="form-group" style="margin-bottom:0;"><label style="font-size:10px;">Description (CN)</label><textarea class="adv-desc-cn" rows="2" style="width:100%;"></textarea></div>' +
+          '<button class="btn btn-xs btn-danger adv-remove-btn" style="margin-top:8px;">Remove</button>';
+        addBtn.parentNode.insertBefore(div, addBtn);
+        div.querySelector(".adv-remove-btn").addEventListener("click", function () { div.remove(); });
+      });
+    }
+    // Remove buttons
+    var removeBtns = container.querySelectorAll(".adv-remove-btn");
+    for (var j = 0; j < removeBtns.length; j++) {
+      removeBtns[j].addEventListener("click", function () {
+        this.parentElement.remove();
+      });
+    }
+  }
+
+  function escapeHtmlAttr(str) {
+    if (!str) return "";
+    return str.replace(/&/g,"&amp;").replace(/"/g,"&quot;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/'/g,"&#39;");
+  }
+
+  // Init editors in initCompanyForm
+  function initStatsAndAdvantages() {
+    renderStatsEditor();
+    renderAdvantagesEditor();
   }
 
   // ---- Export Data ----
