@@ -1,6 +1,7 @@
 /* ============================================================
-   Fashion Factory - Public Data Layer (JSON-driven, NO localStorage)
-   All visitors see the SAME data from fashion-data.json.
+   Fashion Factory - Public Data Layer
+   Reads from window.INLINE_DATA (embedded in page) — NO XHR.
+   Falls back to DEFAULT_DATA if inline data is missing.
    ============================================================ */
 
 var DataManager = (function () {
@@ -79,24 +80,9 @@ var DataManager = (function () {
     return out;
   }
 
-  function loadExternalData() {
-    try {
-      var xhr = new XMLHttpRequest();
-      xhr.open("GET", "fashion-data.json", false);
-      xhr.timeout = 5000;
-      xhr.send();
-      if (xhr.status === 200) {
-        return JSON.parse(xhr.responseText);
-      }
-    } catch (e) {
-      console.warn("Failed to load fashion-data.json, using defaults");
-    }
-    return null;
-  }
-
   function getAllData() {
     if (_data) return _data;
-    var external = loadExternalData();
+    var external = window.INLINE_DATA || null;
     if (external) {
       _data = deepMerge(DEFAULT_DATA, external);
     } else {
