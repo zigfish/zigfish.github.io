@@ -3,6 +3,20 @@
    ============================================================ */
 
 (function () {
+  // Preserve the content source's paragraph breaks without interpreting markup.
+  function renderCompanyParagraphs(id, text) {
+    var container = document.getElementById(id);
+    var fragment = document.createDocumentFragment();
+    String(text || "").split(/\r\n?|\n/).forEach(function (line) {
+      var content = line.trim();
+      if (!content) return;
+      var paragraph = document.createElement("p");
+      paragraph.textContent = content;
+      fragment.appendChild(paragraph);
+    });
+    container.replaceChildren(fragment);
+  }
+
   // ---- Render Company Info ----
   function renderCompanyInfo() {
     var company = DataManager.getCompanyInfo();
@@ -31,9 +45,8 @@
     document.getElementById("hero-name-cn").textContent = company.name;
 
     // About
-    document.getElementById("about-text-en").textContent =
-      company.introEn || company.intro;
-    document.getElementById("about-text-cn").textContent = company.intro;
+    renderCompanyParagraphs("about-text-en", company.introEn || company.intro);
+    renderCompanyParagraphs("about-text-cn", company.intro);
 
     // Contact
     document.getElementById("contact-address-en").textContent =
@@ -359,15 +372,26 @@
   function initMobileMenu() {
     var btn = document.getElementById("mobile-menu-btn");
     var nav = document.getElementById("nav-links");
+    function setMenuOpen(open) {
+      nav.classList.toggle("open", open);
+      btn.setAttribute("aria-expanded", String(open));
+      btn.setAttribute("aria-label", open ? "Close navigation / 关闭导航" : "Open navigation / 打开导航");
+    }
     btn.addEventListener("click", function () {
-      nav.classList.toggle("open");
+      setMenuOpen(!nav.classList.contains("open"));
     });
     var links = nav.querySelectorAll("a");
     for (var i = 0; i < links.length; i++) {
       links[i].addEventListener("click", function () {
-        nav.classList.remove("open");
+        setMenuOpen(false);
       });
     }
+    document.addEventListener("keydown", function (event) {
+      if (event.key === "Escape" && nav.classList.contains("open")) {
+        setMenuOpen(false);
+        btn.focus();
+      }
+    });
   }
 
   // ---- Back to Top ----

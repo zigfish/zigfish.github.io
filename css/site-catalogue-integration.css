@@ -1,0 +1,100 @@
+/* Shared small adjustments for the additional catalogue navigation item. */
+.site-header .container { gap: 24px; }
+.header-logo { flex-shrink: 0; }
+.header-logo .logo-text .en { font-size: 14px; letter-spacing: .6px; }
+.nav-links { gap: 20px; }
+.nav-links a { font-size: 12px; letter-spacing: 1px; }
+.catalogue-featured-section { background: #fafafa; padding-bottom: 64px; scroll-margin-top: 88px; }
+.catalogue-featured-section .section-header { padding-top: 48px; padding-bottom: 32px; }
+.zf-catalogue-page .zf-catalogue-main { padding-top: 94px; padding-bottom: 38px; }
+.zf-catalogue-page .zf-catalogue-back { margin-bottom: 8px; }
+.zf-catalogue-page .zf-catalogue-heading { padding: 8px 0 16px; margin-bottom: 9px; }
+.zf-catalogue-page .zf-catalogue-heading .en { margin-bottom: 8px; }
+.zf-catalogue-page .zf-catalogue-heading .cn { font-size: 28px; }
+.zf-catalogue-page .zf-catalogue-heading .divider { margin-top: 13px; }
+.zf-catalogue-page .zf-catalogue-intro { display: none; }
+.zf-catalogue-page .zf-catalogue-filters { margin-bottom: 15px; }
+.zf-catalogue-grid .zf-catalogue-card-photo { height: 210px; aspect-ratio: auto; }
+.zf-catalogue-featured-grid .zf-catalogue-card-photo { height: 230px; aspect-ratio: auto; }
+
+/* Company copy follows its original paragraphs, with a comfortable reading width. */
+#about { scroll-margin-top: calc(var(--header-height, 68px) + 18px); }
+#about .section-header { padding: 60px 0 30px; }
+#about .about-section { padding: 0 0 64px; }
+#about .about-section .container { max-width: 880px; }
+#about .about-content { display: block; max-width: 72ch; margin: 0 auto; text-align: left; letter-spacing: normal; }
+#about .about-content .en { font-size: 16px; line-height: 1.85; color: #1a1a1a; font-weight: 400; }
+#about .about-content .cn { margin-top: 30px; padding-top: 26px; border-top: 1px solid #e6e6e6; font-size: 14px; line-height: 1.95; color: #666; }
+#about .about-copy { min-width: 0; overflow-wrap: anywhere; white-space: normal; }
+#about .about-copy p { margin: 0; }
+#about .about-copy p + p { margin-top: 1em; }
+.social-float-dock { display: contents; }
+
+/* Keep contact links usable without laying floating buttons over mobile text. */
+@media (max-width: 1024px) {
+  .social-float-dock { display: flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: 14px; padding: 0 24px calc(24px + env(safe-area-inset-bottom, 0px)); background: #111; }
+  .social-float-dock .whatsapp-float,
+  .social-float-dock .social-float,
+  .social-float-dock .back-to-top { position: static; display: inline-flex; flex-shrink: 0; width: 44px; height: 44px; min-width: 44px; margin: 0; opacity: 1; pointer-events: auto; box-shadow: none; }
+  .social-float-dock .back-to-top { border: 1px solid #444; }
+}
+
+@media (max-width: 1180px) {
+  .mobile-menu-btn { display: flex; min-width: 44px; min-height: 44px; align-items: center; justify-content: center; }
+  .nav-links { display: none; position: absolute; top: var(--header-height); left: 0; right: 0; background: #fff; padding: 16px 24px 24px; border-bottom: 1px solid #e4e4e4; flex-direction: column; align-items: center; gap: 0; }
+  .nav-links.open { display: flex; }
+  .nav-links { max-height: calc(100vh - var(--header-height)); max-height: calc(100dvh - var(--header-height)); overflow-y: auto; overscroll-behavior: contain; }
+  .nav-links a { display: flex; align-items: center; justify-content: center; min-height: 44px; font-size: 13px; }
+  .nav-links a::after { bottom: 5px; }
+}
+@media (max-width: 680px) {
+  .site-header .container { gap: 10px; }
+  .header-logo { min-width: 0; flex-shrink: 1; gap: 9px; }
+  .header-logo img { max-width: 114px; height: auto; max-height: 35px; }
+  .header-logo .logo-text { min-width: 0; }
+  .header-logo .logo-text .en { font-size: 10px; letter-spacing: 0; max-width: 190px; }
+  .header-logo .logo-text .cn { font-size: 10px; }
+  .site-header nav { flex-shrink: 0; }
+  .catalogue-featured-section { padding-bottom: 42px; }
+  .zf-catalogue-page .zf-catalogue-main { padding-top: 78px; }
+  .zf-catalogue-page .zf-catalogue-back { display: none; }
+  .zf-catalogue-page .zf-catalogue-heading { padding: 5px 0 12px; margin-bottom: 11px; }
+  .zf-catalogue-page .zf-catalogue-heading .cn { font-size: 25px; }
+  .zf-catalogue-grid .zf-catalogue-card-photo,
+  .zf-catalogue-featured-grid .zf-catalogue-card-photo { height: 150px; aspect-ratio: auto; }
+  #about .section-header { padding: 46px 0 25px; }
+  #about .about-section { padding-bottom: 46px; }
+  #about .about-section .container { padding-left: 24px; padding-right: 24px; }
+  #about .about-content .en { font-size: 15px; line-height: 1.85; }
+  #about .about-content .cn { font-size: 14px; line-height: 1.95; margin-top: 27px; padding-top: 23px; }
+}
+
+/* A short viewport needs the same controls without a scrolling image wall. */
+@media (max-height: 520px) and (min-width: 600px) {
+  .zf-catalogue-dialog[open] { grid-template-columns: minmax(0, 1fr) 280px; grid-template-rows: minmax(0, 1fr); }
+  .zf-catalogue-dialog-photo { padding: 12px; }
+  .zf-catalogue-dialog-info { display: flex; justify-content: center; border-top: 0; border-left: 1px solid #eee; padding: 36px 18px 10px; }
+  .zf-catalogue-dialog-title { font-size: 17px; line-height: 1.2; margin-bottom: 4px; }
+  .zf-catalogue-dialog-cn { font-size: 11px; line-height: 1.4; margin-bottom: 4px; }
+  .zf-catalogue-dialog-reference { font-size: 11px; line-height: 1.4; margin-bottom: 4px; }
+  .zf-catalogue-dialog-reference small { display: none; }
+  .zf-catalogue-views { width: 100%; border: 0; margin-top: 4px; padding: 0; }
+  .zf-catalogue-view-button { min-height: 42px; }
+  .zf-catalogue-product-nav { width: 100%; flex-wrap: nowrap; gap: 7px; margin-top: 4px; }
+  .zf-catalogue-product-nav button { font-size: 11px; line-height: 1.25; min-height: 42px; }
+  .zf-catalogue-dialog-contact { display: none; }
+}
+
+/* Small portrait phones keep a full-width image above compact controls. */
+@media (max-height: 600px) and (max-width: 599px) {
+  .zf-catalogue-dialog[open] { grid-template-columns: minmax(0, 1fr); grid-template-rows: minmax(110px, 1fr) auto; }
+  .zf-catalogue-dialog-photo { padding: 12px 22px 0; }
+  .zf-catalogue-dialog-info { display: block; padding: 10px 12px; }
+  .zf-catalogue-dialog-title { font-size: 15px; line-height: 1.25; margin-bottom: 3px; }
+  .zf-catalogue-dialog-cn { font-size: 11px; line-height: 1.4; margin-bottom: 3px; }
+  .zf-catalogue-dialog-reference { font-size: 11px; line-height: 1.4; margin-bottom: 4px; }
+  .zf-catalogue-dialog-reference small { display: none; }
+  .zf-catalogue-views { width: 100%; margin: 0; padding: 0; justify-content: center; gap: 18px; }
+  .zf-catalogue-product-nav { width: 100%; margin-top: 4px; gap: 5px; flex-wrap: nowrap; }
+  .zf-catalogue-product-nav button { font-size: 10px; min-height: 42px; line-height: 1.3; }
+}
